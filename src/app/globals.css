@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+@theme inline {
+  /* Brand colors — from V1 design spec */
+  --color-cream: #FBF8F4;
+  --color-cream-alt: #F5F0E8;
+  --color-brown: #2C1810;
+  --color-brown-light: #6B5B4E;
+  --color-gold: #C4956A;
+  --color-whatsapp: #25D366;
+
+  /* Typography — next/font CSS variables */
+  --font-heading: var(--font-heading);
+  --font-body: var(--font-body);
+}
