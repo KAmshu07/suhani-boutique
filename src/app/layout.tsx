@@ -50,6 +50,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${josefinSans.variable} ${poppins.variable} ${tiroDevanagari.variable} h-full antialiased`}
     >
       <head>
