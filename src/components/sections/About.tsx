@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useTranslation } from "@/lib/i18n";
 import { useScrollReveal } from "@/lib/use-scroll-animation";
 import { SECTION_ID } from "@/data/constants";
@@ -20,22 +21,17 @@ export default function About() {
         ref={ref}
         className="scroll-reveal grid grid-cols-1 md:grid-cols-2 gap-12 max-w-6xl mx-auto items-center"
       >
-        {/* Left column: placeholder image */}
+        {/* Left column: about image */}
         <div
-          className="aspect-[3/4] bg-cream relative overflow-hidden border-l-4 border-gold"
+          className="aspect-[3/4] relative overflow-hidden border-l-4 border-gold"
         >
-          {/* Subtle fabric weave pattern */}
-          <div
-            className="absolute inset-0 opacity-[0.06] pointer-events-none"
-            style={{
-              backgroundImage: `url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%232C1810' fill-opacity='1'%3E%3Cpath d='M0 0h10v10H0zM10 10h10v10H10z' fill-opacity='.3'/%3E%3C/g%3E%3C/svg%3E")`,
-            }}
+          <Image
+            src="https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=800&q=80"
+            alt="Suhani Boutique workspace"
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 50vw"
           />
-          <div className="absolute inset-0 flex items-center justify-center">
-            <span className="font-heading uppercase tracking-widest text-brown-light/30 text-sm">
-              {t("about.photoPlaceholder")}
-            </span>
-          </div>
         </div>
 
         {/* Right column: text content */}

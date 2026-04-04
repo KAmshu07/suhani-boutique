@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { useTranslation } from "@/lib/i18n";
 import { useScrollReveal } from "@/lib/use-scroll-animation";
 import { SECTION_ID, GALLERY_CATEGORY } from "@/data/constants";
@@ -51,7 +52,7 @@ export default function Gallery() {
                 key={category}
                 onClick={() => setActiveCategory(category)}
                 aria-pressed={activeCategory === category}
-                className={`px-5 py-2 font-heading uppercase tracking-wider text-xs transition-colors ${
+                className={`px-5 py-2.5 font-heading uppercase tracking-wider text-xs transition-colors ${
                   isActive
                     ? "bg-gold text-cream"
                     : "bg-cream-alt text-brown hover:bg-gold/20"
@@ -65,7 +66,7 @@ export default function Gallery() {
 
         {/* Gallery grid */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-6xl mx-auto">
-          {filtered.map((item, index) => {
+          {filtered.map((item) => {
             const categoryLabel =
               galleryCategoryLabels[item.category as keyof typeof galleryCategoryLabels]?.[
                 language as keyof (typeof galleryCategoryLabels)["all"]
@@ -76,21 +77,14 @@ export default function Gallery() {
                 key={item.id}
                 className="stagger-child aspect-square relative overflow-hidden group"
               >
-                {/* Woven texture placeholder */}
-                <div
-                  className="absolute inset-0 bg-cream-alt group-hover:scale-[1.03] transition-transform duration-300"
-                  style={{
-                    backgroundImage: `linear-gradient(${index * 30}deg, #F5F0E8 25%, transparent 25%, transparent 50%, #F5F0E8 50%, #F5F0E8 75%, transparent 75%, transparent)`,
-                    backgroundSize: "20px 20px",
-                  }}
+                {/* Stock photo */}
+                <Image
+                  src={item.src}
+                  alt={item.alt}
+                  fill
+                  className="object-cover group-hover:scale-[1.03] transition-transform duration-300"
+                  sizes="(max-width: 768px) 50vw, 25vw"
                 />
-
-                {/* "Coming Soon" placeholder text */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="font-heading uppercase tracking-widest text-brown-light/40 text-sm">
-                    {t("gallery.comingSoon")}
-                  </span>
-                </div>
 
                 {/* Hover overlay with category label */}
                 <div className="absolute inset-0 bg-brown/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">

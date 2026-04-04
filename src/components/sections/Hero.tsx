@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useTranslation } from "@/lib/i18n";
 import { SECTION_ID } from "@/data/constants";
 
@@ -15,6 +16,19 @@ export default function Hero() {
       id={SECTION_ID.HOME}
       className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-cream via-cream-alt to-cream overflow-hidden"
     >
+      {/* Full-viewport background image */}
+      <Image
+        src="https://images.unsplash.com/photo-1617019114583-affb34d1b3cd?w=1920&q=80"
+        alt=""
+        fill
+        priority
+        className="object-cover"
+        sizes="100vw"
+      />
+
+      {/* Dark overlay */}
+      <div className="absolute inset-0 bg-brown/40" />
+
       {/* Subtle geometric pattern overlay */}
       <div
         className="absolute inset-0 opacity-[0.04] pointer-events-none"
@@ -24,14 +38,14 @@ export default function Hero() {
       />
 
       {/* CSS animation handles fade-in — no JS state needed */}
-      <div className="hero-content relative text-center px-6">
+      <div className="hero-content relative z-10 text-center px-6">
         <div className="w-16 h-px bg-gold mx-auto mb-8" />
 
-        <h1 className="font-heading text-5xl md:text-7xl font-bold uppercase tracking-[0.2em] text-brown">
+        <h1 className="font-heading text-5xl md:text-7xl font-bold uppercase tracking-[0.2em] text-cream">
           {t("hero.title")}
         </h1>
 
-        <p className="font-heading text-lg md:text-xl font-light italic uppercase tracking-widest text-brown-light mt-4">
+        <p className="font-heading text-lg md:text-xl font-light italic uppercase tracking-widest text-cream/70 mt-4">
           {t("hero.subtitle")}
         </p>
 
@@ -40,13 +54,13 @@ export default function Hero() {
         <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
           <button
             onClick={() => scrollTo(SECTION_ID.GALLERY)}
-            className="border-2 border-gold text-gold hover:bg-gold hover:text-cream rounded-none px-8 py-3 font-heading uppercase tracking-wider text-sm transition-colors"
+            className="border-2 border-cream text-cream hover:bg-cream hover:text-brown rounded-none px-8 py-3 font-heading uppercase tracking-wider text-sm transition-colors"
           >
             {t("nav.gallery")}
           </button>
           <button
             onClick={() => scrollTo(SECTION_ID.BOOKING)}
-            className="bg-gold text-cream hover:bg-brown rounded-none px-8 py-3 font-heading uppercase tracking-wider text-sm transition-colors"
+            className="bg-gold text-cream hover:bg-cream hover:text-brown rounded-none px-8 py-3 font-heading uppercase tracking-wider text-sm transition-colors"
           >
             {t("hero.cta")}
           </button>

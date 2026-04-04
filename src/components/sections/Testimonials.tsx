@@ -93,10 +93,14 @@ export default function Testimonials() {
               key={index}
               onClick={() => goTo(index)}
               aria-label={`Testimonial ${index + 1}`}
-              className={`w-2 h-2 rounded-full transition-colors ${
-                index === activeIndex ? "bg-gold" : "bg-brown-light/30"
-              }`}
-            />
+              className="p-3"
+            >
+              <span
+                className={`block w-2 h-2 rounded-full transition-colors ${
+                  index === activeIndex ? "bg-gold" : "bg-brown-light/30"
+                }`}
+              />
+            </button>
           ))}
         </div>
       </div>

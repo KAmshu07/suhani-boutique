@@ -3,8 +3,8 @@
 
 export const businessInfo = {
   name: "Suhani Boutique",
-  phone: "+919XXXXXXXXX",
-  whatsappNumber: "919XXXXXXXXX",
+  phone: "+917903734532",
+  whatsappNumber: "917903734532",
   email: "suhani.boutique.raipur@gmail.com",
   address: {
     line1: "Suhani Boutique",

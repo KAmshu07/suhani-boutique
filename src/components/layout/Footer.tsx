@@ -22,7 +22,7 @@ export default function Footer() {
   }
 
   return (
-    <footer className="bg-brown text-cream">
+    <footer className="bg-brown text-cream pb-20 md:pb-0">
       {/* Main footer content */}
       <div className="mx-auto max-w-7xl px-6 py-16">
         <div className="grid gap-12 md:grid-cols-3">
