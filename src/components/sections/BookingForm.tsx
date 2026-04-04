@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useTranslation } from "@/lib/i18n";
-import { useScrollAnimation } from "@/lib/use-scroll-animation";
+import { useScrollReveal } from "@/lib/use-scroll-animation";
 import { getWhatsAppUrl } from "@/lib/whatsapp";
 import { SECTION_ID } from "@/data/constants";
 import { services } from "@/data/services";
@@ -11,7 +11,7 @@ import { CheckIcon, PhoneIcon, ClockIcon, MapPinIcon } from "@/components/icons"
 
 export default function BookingForm() {
   const { t, language } = useTranslation();
-  const { ref, isVisible } = useScrollAnimation();
+  const ref = useScrollReveal();
 
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -58,9 +58,7 @@ export default function BookingForm() {
     <section id={SECTION_ID.BOOKING} className="bg-cream-alt py-20 md:py-28 px-6">
       <div
         ref={ref}
-        className={`grid grid-cols-1 md:grid-cols-2 gap-12 max-w-6xl mx-auto transition-all duration-700 ${
-          isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-        }`}
+        className="scroll-reveal grid grid-cols-1 md:grid-cols-2 gap-12 max-w-6xl mx-auto"
       >
         {/* Left: Form */}
         <div>

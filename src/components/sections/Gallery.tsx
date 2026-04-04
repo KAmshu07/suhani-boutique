@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { useTranslation } from "@/lib/i18n";
-import { useScrollAnimation } from "@/lib/use-scroll-animation";
-import { SECTION_ID, GALLERY_CATEGORY, ANIMATION } from "@/data/constants";
+import { useScrollReveal } from "@/lib/use-scroll-animation";
+import { SECTION_ID, GALLERY_CATEGORY } from "@/data/constants";
 import { galleryItems, galleryCategoryLabels } from "@/data/gallery";
 
 const categories = [
@@ -17,7 +17,7 @@ const categories = [
 
 export default function Gallery() {
   const { t, language } = useTranslation();
-  const { ref, isVisible } = useScrollAnimation();
+  const ref = useScrollReveal();
   const [activeCategory, setActiveCategory] = useState<string>(GALLERY_CATEGORY.ALL);
 
   const filtered =
@@ -29,7 +29,7 @@ export default function Gallery() {
     <section id={SECTION_ID.GALLERY} className="bg-cream py-20 md:py-28 px-6">
       <div
         ref={ref}
-        className={`transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
+        className="scroll-reveal"
       >
         {/* Section heading */}
         <h2 className="font-heading text-3xl md:text-4xl font-semibold uppercase tracking-widest text-brown text-center">
@@ -74,10 +74,7 @@ export default function Gallery() {
             return (
               <div
                 key={item.id}
-                className={`aspect-square relative overflow-hidden group transition-all duration-700 ${
-                  isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-                }`}
-                style={{ transitionDelay: `${index * ANIMATION.CARD_STAGGER}ms` }}
+                className="stagger-child aspect-square relative overflow-hidden group"
               >
                 {/* Woven texture placeholder */}
                 <div

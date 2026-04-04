@@ -52,6 +52,10 @@ export default function RootLayout({
       lang="en"
       className={`${josefinSans.variable} ${poppins.variable} ${tiroDevanagari.variable} h-full antialiased`}
     >
+      <head>
+        {/* Mark JS-capable before first paint — enables CSS scroll animations */}
+        <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
+      </head>
       <body className="min-h-full flex flex-col font-body text-brown bg-cream">
         <JsonLd />
         <LanguageProvider>{children}</LanguageProvider>

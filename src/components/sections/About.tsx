@@ -1,12 +1,12 @@
 "use client";
 
 import { useTranslation } from "@/lib/i18n";
-import { useScrollAnimation } from "@/lib/use-scroll-animation";
+import { useScrollReveal } from "@/lib/use-scroll-animation";
 import { SECTION_ID } from "@/data/constants";
 
 export default function About() {
   const { t } = useTranslation();
-  const { ref, isVisible } = useScrollAnimation();
+  const ref = useScrollReveal();
 
   const stats = [
     { value: "20+", label: t("about.stat.experience") },
@@ -18,15 +18,11 @@ export default function About() {
     <section id={SECTION_ID.ABOUT} className="bg-cream-alt py-20 md:py-28 px-6">
       <div
         ref={ref}
-        className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-6xl mx-auto items-center"
+        className="scroll-reveal grid grid-cols-1 md:grid-cols-2 gap-12 max-w-6xl mx-auto items-center"
       >
         {/* Left column: placeholder image */}
         <div
-          className={`aspect-[3/4] bg-cream relative overflow-hidden border-l-4 border-gold transition-all duration-700 ${
-            isVisible
-              ? "opacity-100 translate-x-0"
-              : "opacity-0 -translate-x-8"
-          }`}
+          className="aspect-[3/4] bg-cream relative overflow-hidden border-l-4 border-gold"
         >
           {/* Subtle fabric weave pattern */}
           <div
@@ -43,13 +39,7 @@ export default function About() {
         </div>
 
         {/* Right column: text content */}
-        <div
-          className={`transition-all duration-700 ${
-            isVisible
-              ? "opacity-100 translate-x-0"
-              : "opacity-0 translate-x-8"
-          }`}
-        >
+        <div>
           <h2 className="font-heading text-3xl font-semibold uppercase tracking-widest text-brown">
             {t("about.heading")}
           </h2>

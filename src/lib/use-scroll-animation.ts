@@ -1,33 +1,33 @@
 "use client";
 
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useEffect, useRef } from "react";
 import { SCROLL } from "@/data/constants";
 
-const emptySubscribe = () => () => {};
-
-export function useScrollAnimation(threshold = SCROLL.OBSERVER_THRESHOLD) {
+/**
+ * Pure DOM scroll reveal. Adds `.revealed` class when element enters viewport.
+ * All animation logic lives in CSS (globals.css).
+ * No React state — SSR-safe by design.
+ */
+export function useScrollReveal(threshold = SCROLL.OBSERVER_THRESHOLD) {
   const ref = useRef<HTMLDivElement>(null);
-  const isClient = useSyncExternalStore(emptySubscribe, () => true, () => false);
-  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    const element = ref.current;
-    if (!element) return;
+    const el = ref.current;
+    if (!el) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.unobserve(element);
+          el.classList.add("revealed");
+          observer.unobserve(el);
         }
       },
       { threshold },
     );
 
-    observer.observe(element);
+    observer.observe(el);
     return () => observer.disconnect();
   }, [threshold]);
 
-  // SSR: visible (no animations). Client: animations control visibility.
-  return { ref, isVisible: !isClient || isVisible };
+  return ref;
 }

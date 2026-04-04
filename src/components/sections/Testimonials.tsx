@@ -2,13 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { useTranslation } from "@/lib/i18n";
-import { useScrollAnimation } from "@/lib/use-scroll-animation";
+import { useScrollReveal } from "@/lib/use-scroll-animation";
 import { SECTION_ID, ANIMATION } from "@/data/constants";
 import { testimonials } from "@/data/testimonials";
 
 export default function Testimonials() {
   const { t, language } = useTranslation();
-  const { ref, isVisible } = useScrollAnimation();
+  const ref = useScrollReveal();
   const [activeIndex, setActiveIndex] = useState(0);
   const [fade, setFade] = useState(true);
   const [paused, setPaused] = useState(false);
@@ -42,9 +42,7 @@ export default function Testimonials() {
     <section id={SECTION_ID.TESTIMONIALS} className="bg-cream py-20 md:py-28 px-6">
       <div
         ref={ref}
-        className={`max-w-6xl mx-auto transition-all duration-700 ${
-          isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-        }`}
+        className="scroll-reveal max-w-6xl mx-auto"
       >
         {/* Heading */}
         <div className="text-center">

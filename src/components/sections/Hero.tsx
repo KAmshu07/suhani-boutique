@@ -1,27 +1,14 @@
 "use client";
 
-import { useEffect, useState, useSyncExternalStore } from "react";
 import { useTranslation } from "@/lib/i18n";
-import { SECTION_ID, ANIMATION } from "@/data/constants";
-
-const emptySubscribe = () => () => {};
+import { SECTION_ID } from "@/data/constants";
 
 export default function Hero() {
   const { t } = useTranslation();
-  const isClient = useSyncExternalStore(emptySubscribe, () => true, () => false);
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setVisible(true), ANIMATION.HERO_INITIAL_DELAY);
-    return () => clearTimeout(timer);
-  }, []);
 
   function scrollTo(id: string) {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   }
-
-  // SSR: content visible immediately. Client: fade-in animation.
-  const showContent = !isClient || visible;
 
   return (
     <section
@@ -36,15 +23,8 @@ export default function Hero() {
         }}
       />
 
-      <div
-        className="relative text-center px-6 transition-all"
-        style={{
-          opacity: showContent ? 1 : 0,
-          transform: showContent ? "translateY(0)" : "translateY(12px)",
-          transitionDuration: isClient ? `${ANIMATION.HERO_FADE_IN}ms` : "0ms",
-        }}
-      >
-        {/* Decorative line above title */}
+      {/* CSS animation handles fade-in — no JS state needed */}
+      <div className="hero-content relative text-center px-6">
         <div className="w-16 h-px bg-gold mx-auto mb-8" />
 
         <h1 className="font-heading text-5xl md:text-7xl font-bold uppercase tracking-[0.2em] text-brown">
@@ -55,10 +35,8 @@ export default function Hero() {
           {t("hero.subtitle")}
         </p>
 
-        {/* Decorative line below tagline */}
         <div className="w-16 h-px bg-gold mx-auto mt-8" />
 
-        {/* CTA buttons */}
         <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
           <button
             onClick={() => scrollTo(SECTION_ID.GALLERY)}

@@ -45,3 +45,72 @@ html {
 ::-webkit-scrollbar-thumb:hover {
   background: #A87B52;
 }
+
+/* ─── Scroll Reveal Animations ─────────────────────────────────── */
+/* Default: content visible (SSR-safe, no-JS-safe) */
+.scroll-reveal {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* When JS is available (.js on <html>): hide until revealed */
+.js .scroll-reveal {
+  opacity: 0;
+  transform: translateY(2rem);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+/* IntersectionObserver adds .revealed — animate in */
+.js .scroll-reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ─── Hero Entrance Animation ──────────────────────────────────── */
+@keyframes hero-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-content {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.js .hero-content {
+  opacity: 0;
+  transform: translateY(12px);
+  animation: hero-fade-in 2s ease 0.1s forwards;
+}
+
+/* ─── Staggered Children ───────────────────────────────────────── */
+.js .scroll-reveal.revealed .stagger-child {
+  opacity: 0;
+  transform: translateY(2rem);
+  animation: hero-fade-in 0.6s ease forwards;
+}
+
+.js .scroll-reveal.revealed .stagger-child:nth-child(1) { animation-delay: 0ms; }
+.js .scroll-reveal.revealed .stagger-child:nth-child(2) { animation-delay: 100ms; }
+.js .scroll-reveal.revealed .stagger-child:nth-child(3) { animation-delay: 200ms; }
+.js .scroll-reveal.revealed .stagger-child:nth-child(4) { animation-delay: 300ms; }
+.js .scroll-reveal.revealed .stagger-child:nth-child(5) { animation-delay: 400ms; }
+.js .scroll-reveal.revealed .stagger-child:nth-child(6) { animation-delay: 500ms; }
+
+/* Reduced motion: disable all animations */
+@media (prefers-reduced-motion: reduce) {
+  .js .scroll-reveal,
+  .js .hero-content,
+  .js .scroll-reveal.revealed .stagger-child {
+    opacity: 1;
+    transform: none;
+    transition: none;
+    animation: none;
+  }
+}

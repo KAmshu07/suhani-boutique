@@ -1,9 +1,9 @@
 "use client";
 
 import { useTranslation } from "@/lib/i18n";
-import { useScrollAnimation } from "@/lib/use-scroll-animation";
+import { useScrollReveal } from "@/lib/use-scroll-animation";
 import { getWhatsAppUrl } from "@/lib/whatsapp";
-import { SECTION_ID, ANIMATION } from "@/data/constants";
+import { SECTION_ID } from "@/data/constants";
 import { services } from "@/data/services";
 
 function ServiceIcon({ name }: { name: string }) {
@@ -63,13 +63,13 @@ function ServiceIcon({ name }: { name: string }) {
 
 export default function Services() {
   const { t } = useTranslation();
-  const { ref, isVisible } = useScrollAnimation();
+  const ref = useScrollReveal();
 
   return (
     <section id={SECTION_ID.SERVICES} className="bg-cream-alt py-20 md:py-28 px-6">
       <div
         ref={ref}
-        className={`transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
+        className="scroll-reveal"
       >
         {/* Section heading */}
         <h2 className="font-heading text-3xl md:text-4xl font-semibold uppercase tracking-widest text-brown text-center">
@@ -79,7 +79,7 @@ export default function Services() {
 
         {/* Service cards grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {services.map((service, index) => {
+          {services.map((service) => {
             const serviceName = t(`services.${service.key}`);
             const whatsappUrl = getWhatsAppUrl(
               t("services.whatsappInquiry") + " " + serviceName
@@ -88,10 +88,7 @@ export default function Services() {
             return (
               <div
                 key={service.key}
-                className={`bg-cream rounded-none p-8 hover:shadow-lg transition-all duration-700 ${
-                  isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-                }`}
-                style={{ transitionDelay: `${index * ANIMATION.CARD_STAGGER}ms` }}
+                className="stagger-child bg-cream rounded-none p-8 hover:shadow-lg transition-shadow"
               >
                 <ServiceIcon name={service.icon} />
                 <h3 className="font-heading text-lg font-semibold uppercase tracking-wider text-brown mt-4">
