@@ -50,6 +50,16 @@ export const translations = {
     "status.completed": "Completed",
     "status.delivered": "Delivered",
 
+    // Footer
+    "footer.tagline": "Premium Tailoring & Custom Stitching",
+    "footer.quickLinks": "Quick Links",
+    "footer.contactInfo": "Contact Info",
+    "footer.hours": "Hours",
+    "footer.weekdays": "Mon – Sat",
+    "footer.sunday": "Sunday",
+    "footer.crafted": "Crafted with care in Raipur",
+    "footer.copyright": "All rights reserved.",
+
     // Common
     "common.whatsapp": "Chat on WhatsApp",
     "common.call": "Call Us",
@@ -106,6 +116,16 @@ export const translations = {
     "status.completed": "पूरा हुआ",
     "status.delivered": "डिलीवर किया गया",
 
+    // Footer
+    "footer.tagline": "प्रीमियम टेलरिंग और कस्टम सिलाई",
+    "footer.quickLinks": "त्वरित लिंक",
+    "footer.contactInfo": "संपर्क जानकारी",
+    "footer.hours": "समय",
+    "footer.weekdays": "सोम – शनि",
+    "footer.sunday": "रविवार",
+    "footer.crafted": "रायपुर में प्यार से बनाया गया",
+    "footer.copyright": "सर्वाधिकार सुरक्षित।",
+
     // Common
     "common.whatsapp": "WhatsApp पर चैट करें",
     "common.call": "कॉल करें",
@@ -161,6 +181,16 @@ export const translations = {
     "status.alterations": "अल्टरेशन",
     "status.completed": "पूरा होगे",
     "status.delivered": "डिलीवर होगे",
+
+    // Footer
+    "footer.tagline": "प्रीमियम टेलरिंग अउ कस्टम सिलाई",
+    "footer.quickLinks": "जल्दी लिंक",
+    "footer.contactInfo": "संपर्क जानकारी",
+    "footer.hours": "समय",
+    "footer.weekdays": "सोम – शनि",
+    "footer.sunday": "रविवार",
+    "footer.crafted": "रायपुर म प्यार से बनाए गीस",
+    "footer.copyright": "सब अधिकार सुरक्षित।",
 
     // Common
     "common.whatsapp": "WhatsApp म चैट करव",

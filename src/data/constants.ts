@@ -37,6 +37,15 @@ export const LANGUAGE = {
   CG: "cg",
 } as const;
 
+export const LANGUAGE_LABELS = {
+  en: "EN",
+  hi: "HI",
+  cg: "CG",
+} as const;
+
+export const DEFAULT_LANGUAGE = LANGUAGE.EN;
+export const LANGUAGE_STORAGE_KEY = "suhani-boutique-lang";
+
 // ─── Service Categories ──────────────────────────────────────────
 export const SERVICE_CATEGORY = {
   CUSTOM_STITCHING: "custom_stitching",
@@ -55,11 +64,46 @@ export const APPOINTMENT_STATUS = {
   COMPLETED: "completed",
 } as const;
 
-// ─── Route Paths ─────────────────────────────────────────────────
-// (add as features are built)
+// ─── Gallery Categories ──────────────────────────────────────────
+export const GALLERY_CATEGORY = {
+  ALL: "all",
+  BRIDAL: "bridal",
+  FESTIVAL: "festival",
+  DAILY: "daily",
+  ALTERATIONS: "alterations",
+  FABRIC: "fabric",
+} as const;
 
-// ─── CSS / Layout ────────────────────────────────────────────────
-// (add as components are built)
+// ─── Section IDs ─────────────────────────────────────────────────
+export const SECTION_ID = {
+  HOME: "home",
+  SERVICES: "services",
+  GALLERY: "gallery",
+  ABOUT: "about",
+  TESTIMONIALS: "testimonials",
+  BOOKING: "booking",
+  CONTACT: "contact",
+} as const;
+
+// ─── Animation Durations (ms) ────────────────────────────────────
+export const ANIMATION = {
+  HERO_FADE_IN: 2000,
+  SECTION_FADE_IN: 600,
+  CARD_STAGGER: 100,
+  GALLERY_HOVER_SCALE: 1.03,
+  NAV_TRANSITION: 300,
+  WHATSAPP_BOUNCE_DELAY: 2000,
+  TESTIMONIAL_INTERVAL: 5000,
+} as const;
+
+// ─── Scroll Thresholds ───────────────────────────────────────────
+export const SCROLL = {
+  NAV_SOLID_THRESHOLD: 100,
+  BACK_TO_TOP_THRESHOLD: 500,
+  OBSERVER_THRESHOLD: 0.15,
+} as const;
 
 // ─── External URLs ───────────────────────────────────────────────
-// (add as integrations are wired)
+export const EXTERNAL = {
+  WHATSAPP_BASE: "https://wa.me",
+} as const;

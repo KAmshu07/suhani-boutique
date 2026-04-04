@@ -7,9 +7,41 @@
   --color-brown: #2C1810;
   --color-brown-light: #6B5B4E;
   --color-gold: #C4956A;
+  --color-gold-hover: #A87B52;
   --color-whatsapp: #25D366;
 
   /* Typography — next/font CSS variables */
   --font-heading: var(--font-heading);
   --font-body: var(--font-body);
+  --font-hindi: var(--font-hindi);
+}
+
+/* Smooth scroll for anchor navigation */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
+/* Selection color */
+::selection {
+  background-color: #C4956A;
+  color: #FBF8F4;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #FBF8F4;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #C4956A;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #A87B52;
 }
