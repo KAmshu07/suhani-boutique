@@ -1,10 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { SCROLL } from "@/data/constants";
+
+const emptySubscribe = () => () => {};
 
 export function useScrollAnimation(threshold = SCROLL.OBSERVER_THRESHOLD) {
   const ref = useRef<HTMLDivElement>(null);
+  const isClient = useSyncExternalStore(emptySubscribe, () => true, () => false);
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -25,5 +28,6 @@ export function useScrollAnimation(threshold = SCROLL.OBSERVER_THRESHOLD) {
     return () => observer.disconnect();
   }, [threshold]);
 
-  return { ref, isVisible };
+  // SSR: visible (no animations). Client: animations control visibility.
+  return { ref, isVisible: !isClient || isVisible };
 }

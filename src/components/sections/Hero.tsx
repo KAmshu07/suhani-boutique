@@ -1,11 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { useTranslation } from "@/lib/i18n";
 import { SECTION_ID, ANIMATION } from "@/data/constants";
 
+const emptySubscribe = () => () => {};
+
 export default function Hero() {
   const { t } = useTranslation();
+  const isClient = useSyncExternalStore(emptySubscribe, () => true, () => false);
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -16,6 +19,9 @@ export default function Hero() {
   function scrollTo(id: string) {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   }
+
+  // SSR: content visible immediately. Client: fade-in animation.
+  const showContent = !isClient || visible;
 
   return (
     <section
@@ -33,9 +39,9 @@ export default function Hero() {
       <div
         className="relative text-center px-6 transition-all"
         style={{
-          opacity: visible ? 1 : 0,
-          transform: visible ? "translateY(0)" : "translateY(12px)",
-          transitionDuration: `${ANIMATION.HERO_FADE_IN}ms`,
+          opacity: showContent ? 1 : 0,
+          transform: showContent ? "translateY(0)" : "translateY(12px)",
+          transitionDuration: isClient ? `${ANIMATION.HERO_FADE_IN}ms` : "0ms",
         }}
       >
         {/* Decorative line above title */}
