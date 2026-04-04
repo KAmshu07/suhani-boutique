@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { SCROLL } from "@/data/constants";
+import { ArrowUpIcon } from "@/components/icons";
 
 export default function BackToTop() {
   const [visible, setVisible] = useState(false);
@@ -30,18 +31,7 @@ export default function BackToTop() {
           : "translate-y-4 pointer-events-none opacity-0"
       }`}
     >
-      <svg
-        className="h-5 w-5"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        aria-hidden="true"
-      >
-        <path d="M18 15l-6-6-6 6" />
-      </svg>
+      <ArrowUpIcon className="h-5 w-5" />
     </button>
   );
 }

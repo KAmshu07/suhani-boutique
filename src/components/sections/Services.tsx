@@ -82,7 +82,7 @@ export default function Services() {
           {services.map((service, index) => {
             const serviceName = t(`services.${service.key}`);
             const whatsappUrl = getWhatsAppUrl(
-              `Hi, I'm interested in ${serviceName}`
+              t("services.whatsappInquiry") + " " + serviceName
             );
 
             return (
@@ -106,7 +106,7 @@ export default function Services() {
                   rel="noopener noreferrer"
                   className="inline-block mt-4 text-gold font-heading uppercase tracking-wider text-sm hover:text-brown transition-colors"
                 >
-                  Enquire
+                  {t("services.enquire")}
                 </a>
               </div>
             );

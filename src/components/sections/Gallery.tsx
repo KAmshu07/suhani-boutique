@@ -50,6 +50,7 @@ export default function Gallery() {
               <button
                 key={category}
                 onClick={() => setActiveCategory(category)}
+                aria-pressed={activeCategory === category}
                 className={`px-5 py-2 font-heading uppercase tracking-wider text-xs transition-colors ${
                   isActive
                     ? "bg-gold text-cream"
@@ -90,7 +91,7 @@ export default function Gallery() {
                 {/* "Coming Soon" placeholder text */}
                 <div className="absolute inset-0 flex items-center justify-center">
                   <span className="font-heading uppercase tracking-widest text-brown-light/40 text-sm">
-                    Coming Soon
+                    {t("gallery.comingSoon")}
                   </span>
                 </div>
 

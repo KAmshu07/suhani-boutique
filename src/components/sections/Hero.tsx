@@ -9,7 +9,7 @@ export default function Hero() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => setVisible(true), 100);
+    const timer = setTimeout(() => setVisible(true), ANIMATION.HERO_INITIAL_DELAY);
     return () => clearTimeout(timer);
   }, []);
 

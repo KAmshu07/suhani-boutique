@@ -85,15 +85,29 @@ export const SECTION_ID = {
   CONTACT: "contact",
 } as const;
 
+// ─── Navigation Links ────────────────────────────────────────────
+export const NAV_LINKS = [
+  { key: "nav.home", id: "home" },
+  { key: "nav.services", id: "services" },
+  { key: "nav.gallery", id: "gallery" },
+  { key: "nav.about", id: "about" },
+  { key: "nav.book", id: "booking" },
+  { key: "nav.contact", id: "contact" },
+] as const;
+
+export const SUPPORTED_LANGUAGES = [LANGUAGE.EN, LANGUAGE.HI, LANGUAGE.CG] as const;
+
 // ─── Animation Durations (ms) ────────────────────────────────────
 export const ANIMATION = {
   HERO_FADE_IN: 2000,
+  HERO_INITIAL_DELAY: 100,
   SECTION_FADE_IN: 600,
   CARD_STAGGER: 100,
   GALLERY_HOVER_SCALE: 1.03,
   NAV_TRANSITION: 300,
   WHATSAPP_BOUNCE_DELAY: 2000,
   TESTIMONIAL_INTERVAL: 5000,
+  TESTIMONIAL_FADE: 300,
 } as const;
 
 // ─── Scroll Thresholds ───────────────────────────────────────────

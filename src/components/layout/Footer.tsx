@@ -3,18 +3,11 @@
 import { useTranslation } from "@/lib/i18n";
 import { businessInfo } from "@/data/business-info";
 import { getWhatsAppUrl } from "@/lib/whatsapp";
-import { SECTION_ID, LANGUAGE, LANGUAGE_LABELS } from "@/data/constants";
-
-const NAV_LINKS = [
-  { key: "nav.home", id: SECTION_ID.HOME },
-  { key: "nav.services", id: SECTION_ID.SERVICES },
-  { key: "nav.gallery", id: SECTION_ID.GALLERY },
-  { key: "nav.about", id: SECTION_ID.ABOUT },
-  { key: "nav.book", id: SECTION_ID.BOOKING },
-  { key: "nav.contact", id: SECTION_ID.CONTACT },
-] as const;
-
-const LANGUAGES = [LANGUAGE.EN, LANGUAGE.HI, LANGUAGE.CG] as const;
+import {
+  LANGUAGE_LABELS,
+  NAV_LINKS,
+  SUPPORTED_LANGUAGES,
+} from "@/data/constants";
 
 export default function Footer() {
   const { t, language, setLanguage } = useTranslation();
@@ -117,7 +110,7 @@ export default function Footer() {
             {t("footer.crafted")}
           </p>
           <div className="flex items-center gap-1 rounded-full border border-cream/20 p-0.5">
-            {LANGUAGES.map((lang) => (
+            {SUPPORTED_LANGUAGES.map((lang) => (
               <button
                 key={lang}
                 type="button"

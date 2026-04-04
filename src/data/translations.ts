@@ -60,6 +60,55 @@ export const translations = {
     "footer.crafted": "Crafted with care in Raipur",
     "footer.copyright": "All rights reserved.",
 
+    // About
+    "about.heading": "Our Story",
+    "about.story":
+      "With over 20 years of tailoring expertise, Suhani Boutique brings the art of fine stitching from Bihar to the heart of Raipur. Every piece we create tells a story of dedication, precision, and love for the craft. From bridal lehengas to everyday alterations, we treat every garment with the same care and attention to detail.",
+    "about.stat.experience": "Years Experience",
+    "about.stat.customers": "Happy Customers",
+    "about.stat.specialties": "Specialties",
+    "about.photoPlaceholder": "Photo Coming Soon",
+
+    // Testimonials
+    "testimonials.heading": "What Our Clients Say",
+
+    // Booking extras
+    "booking.expectHeading": "What to Expect",
+    "booking.expect.consultation": "Free consultation and measurements",
+    "booking.expect.fabric": "Fabric selection guidance",
+    "booking.expect.updates": "Regular progress updates via WhatsApp",
+    "booking.expect.scheduling": "Flexible scheduling",
+    "booking.expect.alterations": "Alterations included",
+    "booking.whatsappLabel.name": "Name",
+    "booking.whatsappLabel.phone": "Phone",
+    "booking.whatsappLabel.service": "Service",
+    "booking.whatsappLabel.date": "Date",
+    "booking.whatsappLabel.notes": "Notes",
+
+    // Contact
+    "contact.heading": "Get in Touch",
+    "contact.mapPlaceholder": "Map Coming Soon",
+    "contact.messageSent": "Message sent! We'll get back to you soon.",
+
+    // Services
+    "services.enquire": "Enquire",
+    "services.whatsappInquiry": "Hi, I'm interested in",
+
+    // Gallery
+    "gallery.comingSoon": "Coming Soon",
+
+    // Error pages
+    "error.title": "Something went wrong",
+    "error.description": "An unexpected error occurred. Please try again.",
+    "error.retry": "Try Again",
+    "notFound.code": "404",
+    "notFound.title": "Page not found",
+    "notFound.description": "The page you are looking for does not exist or has been moved.",
+    "notFound.back": "Back to Home",
+
+    // Accessibility
+    "a11y.starRating": "stars out of 5",
+
     // Common
     "common.whatsapp": "Chat on WhatsApp",
     "common.call": "Call Us",
@@ -126,6 +175,55 @@ export const translations = {
     "footer.crafted": "रायपुर में प्यार से बनाया गया",
     "footer.copyright": "सर्वाधिकार सुरक्षित।",
 
+    // About
+    "about.heading": "हमारी कहानी",
+    "about.story":
+      "20 से अधिक वर्षों की टेलरिंग विशेषज्ञता के साथ, सुहानी बुटीक बिहार से रायपुर के दिल तक बेहतरीन सिलाई की कला लाता है। हम जो भी कपड़ा बनाते हैं, वह समर्पण, सटीकता और शिल्प के प्रति प्रेम की कहानी कहता है। ब्राइडल लहंगे से लेकर रोज़मर्रा के अल्टरेशन तक, हम हर कपड़े को एक जैसी देखभाल और ध्यान से बनाते हैं।",
+    "about.stat.experience": "वर्षों का अनुभव",
+    "about.stat.customers": "खुश ग्राहक",
+    "about.stat.specialties": "विशेषताएं",
+    "about.photoPlaceholder": "फोटो जल्द आ रहा है",
+
+    // Testimonials
+    "testimonials.heading": "हमारे ग्राहक क्या कहते हैं",
+
+    // Booking extras
+    "booking.expectHeading": "क्या उम्मीद करें",
+    "booking.expect.consultation": "मुफ्त परामर्श और माप",
+    "booking.expect.fabric": "कपड़ा चयन मार्गदर्शन",
+    "booking.expect.updates": "WhatsApp पर नियमित प्रगति अपडेट",
+    "booking.expect.scheduling": "लचीला शेड्यूलिंग",
+    "booking.expect.alterations": "अल्टरेशन शामिल",
+    "booking.whatsappLabel.name": "नाम",
+    "booking.whatsappLabel.phone": "फोन",
+    "booking.whatsappLabel.service": "सेवा",
+    "booking.whatsappLabel.date": "तारीख",
+    "booking.whatsappLabel.notes": "नोट",
+
+    // Contact
+    "contact.heading": "संपर्क करें",
+    "contact.mapPlaceholder": "मैप जल्द आ रहा है",
+    "contact.messageSent": "संदेश भेजा गया! हम जल्दी ही आपसे संपर्क करेंगे।",
+
+    // Services
+    "services.enquire": "पूछताछ",
+    "services.whatsappInquiry": "नमस्ते, मुझे इसमें रुचि है",
+
+    // Gallery
+    "gallery.comingSoon": "जल्द आ रहा है",
+
+    // Error pages
+    "error.title": "कुछ गलत हो गया",
+    "error.description": "एक अप्रत्याशित त्रुटि हुई। कृपया पुनः प्रयास करें।",
+    "error.retry": "फिर से प्रयास करें",
+    "notFound.code": "404",
+    "notFound.title": "पेज नहीं मिला",
+    "notFound.description": "आप जो पेज ढूंढ रहे हैं वह मौजूद नहीं है या स्थानांतरित कर दिया गया है।",
+    "notFound.back": "होम पर वापस जाएं",
+
+    // Accessibility
+    "a11y.starRating": "में से 5 तारे",
+
     // Common
     "common.whatsapp": "WhatsApp पर चैट करें",
     "common.call": "कॉल करें",
@@ -191,6 +289,55 @@ export const translations = {
     "footer.sunday": "रविवार",
     "footer.crafted": "रायपुर म प्यार से बनाए गीस",
     "footer.copyright": "सब अधिकार सुरक्षित।",
+
+    // About
+    "about.heading": "हमर कहानी",
+    "about.story":
+      "20 से जादा बरस के टेलरिंग अनुभव के साथ, सुहानी बुटीक बिहार ले रायपुर के दिल तक बढ़िया सिलाई के कला लाथे। हमन जऊन भी कपड़ा बनाथन, वो समर्पण, सटीकता अउ शिल्प के प्रेम के कहानी कहिथे। दुलहिन लहंगा ले रोज़मर्रा के अल्टरेशन तक, हमन हर कपड़ा ला एक जइसे देखभाल अउ ध्यान ले बनाथन।",
+    "about.stat.experience": "बरस के अनुभव",
+    "about.stat.customers": "खुश ग्राहक",
+    "about.stat.specialties": "विशेषता मन",
+    "about.photoPlaceholder": "फोटो जल्दी आवत हे",
+
+    // Testimonials
+    "testimonials.heading": "हमर ग्राहक का कहिथें",
+
+    // Booking extras
+    "booking.expectHeading": "का उम्मीद करव",
+    "booking.expect.consultation": "मुफ्त परामर्श अउ माप",
+    "booking.expect.fabric": "कपड़ा चयन मार्गदर्शन",
+    "booking.expect.updates": "WhatsApp म नियमित प्रगति अपडेट",
+    "booking.expect.scheduling": "लचीला शेड्यूलिंग",
+    "booking.expect.alterations": "अल्टरेशन शामिल",
+    "booking.whatsappLabel.name": "नाम",
+    "booking.whatsappLabel.phone": "फोन",
+    "booking.whatsappLabel.service": "सेवा",
+    "booking.whatsappLabel.date": "तारीख",
+    "booking.whatsappLabel.notes": "नोट",
+
+    // Contact
+    "contact.heading": "संपर्क करव",
+    "contact.mapPlaceholder": "मैप जल्दी आवत हे",
+    "contact.messageSent": "संदेश भेजे गीस! हमन जल्दी तुंहर ले संपर्क करबो।",
+
+    // Services
+    "services.enquire": "पूछताछ",
+    "services.whatsappInquiry": "नमस्ते, मोला एमा रुचि हे",
+
+    // Gallery
+    "gallery.comingSoon": "जल्दी आवत हे",
+
+    // Error pages
+    "error.title": "कुछ गड़बड़ होगे",
+    "error.description": "एक अनजान गलती होगे। कृपया फेर कोशिश करव।",
+    "error.retry": "फेर कोशिश करव",
+    "notFound.code": "404",
+    "notFound.title": "पेज नइ मिलिस",
+    "notFound.description": "तुमन जऊन पेज खोजत हव वो हे नइ या हटा दिए गीस।",
+    "notFound.back": "होम म वापस जाव",
+
+    // Accessibility
+    "a11y.starRating": "म ले 5 तारा",
 
     // Common
     "common.whatsapp": "WhatsApp म चैट करव",

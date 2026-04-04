@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Josefin_Sans, Poppins, Tiro_Devanagari_Hindi } from "next/font/google";
 import { LanguageProvider } from "@/lib/i18n";
+import JsonLd from "@/components/JsonLd";
 import "./globals.css";
 
 const josefinSans = Josefin_Sans({
@@ -31,6 +32,13 @@ export const metadata: Metadata = {
       "Custom stitching, alterations, bridal wear, and more. 20+ years of tailoring expertise.",
     type: "website",
     locale: "en_IN",
+    siteName: "Suhani Boutique",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Suhani Boutique — Premium Tailoring in Raipur",
+    description:
+      "Custom stitching, alterations, bridal wear, and more. 20+ years of tailoring expertise.",
   },
 };
 
@@ -45,6 +53,7 @@ export default function RootLayout({
       className={`${josefinSans.variable} ${poppins.variable} ${tiroDevanagari.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-body text-brown bg-cream">
+        <JsonLd />
         <LanguageProvider>{children}</LanguageProvider>
       </body>
     </html>

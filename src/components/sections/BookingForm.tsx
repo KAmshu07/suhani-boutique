@@ -7,6 +7,7 @@ import { getWhatsAppUrl } from "@/lib/whatsapp";
 import { SECTION_ID } from "@/data/constants";
 import { services } from "@/data/services";
 import { businessInfo } from "@/data/business-info";
+import { CheckIcon, PhoneIcon, ClockIcon, MapPinIcon } from "@/components/icons";
 
 export default function BookingForm() {
   const { t, language } = useTranslation();
@@ -19,37 +20,13 @@ export default function BookingForm() {
   const [message, setMessage] = useState("");
   const [success, setSuccess] = useState(false);
 
-  const expectHeading =
-    language === "hi"
-      ? "क्या उम्मीद करें"
-      : language === "cg"
-        ? "का उम्मीद करव"
-        : "What to Expect";
-
-  const expectItems =
-    language === "hi"
-      ? [
-          "मुफ्त परामर्श और माप",
-          "कपड़ा चयन मार्गदर्शन",
-          "WhatsApp पर नियमित प्रगति अपडेट",
-          "लचीला शेड्यूलिंग",
-          "अल्टरेशन शामिल",
-        ]
-      : language === "cg"
-        ? [
-            "मुफ्त परामर्श अउ माप",
-            "कपड़ा चयन मार्गदर्शन",
-            "WhatsApp म नियमित प्रगति अपडेट",
-            "लचीला शेड्यूलिंग",
-            "अल्टरेशन शामिल",
-          ]
-        : [
-            "Free consultation and measurements",
-            "Fabric selection guidance",
-            "Regular progress updates via WhatsApp",
-            "Flexible scheduling",
-            "Alterations included",
-          ];
+  const expectItems = [
+    t("booking.expect.consultation"),
+    t("booking.expect.fabric"),
+    t("booking.expect.updates"),
+    t("booking.expect.scheduling"),
+    t("booking.expect.alterations"),
+  ];
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -60,11 +37,11 @@ export default function BookingForm() {
   function handleWhatsApp() {
     const serviceName = service ? t(`services.${service}`) : "";
     const parts = [
-      name && `Name: ${name}`,
-      phone && `Phone: ${phone}`,
-      serviceName && `Service: ${serviceName}`,
-      date && `Date: ${date}`,
-      message && `Notes: ${message}`,
+      name && `${t("booking.whatsappLabel.name")}: ${name}`,
+      phone && `${t("booking.whatsappLabel.phone")}: ${phone}`,
+      serviceName && `${t("booking.whatsappLabel.service")}: ${serviceName}`,
+      date && `${t("booking.whatsappLabel.date")}: ${date}`,
+      message && `${t("booking.whatsappLabel.notes")}: ${message}`,
     ].filter(Boolean);
 
     const text = parts.length
@@ -76,8 +53,6 @@ export default function BookingForm() {
 
   const inputClass =
     "w-full bg-cream border border-brown-light/20 px-4 py-3 text-brown focus:border-gold focus:outline-none transition-colors font-body";
-
-  const fullAddress = `${businessInfo.address.line1}, ${businessInfo.address.line2} - ${businessInfo.address.pincode}`;
 
   return (
     <section id={SECTION_ID.BOOKING} className="bg-cream-alt py-20 md:py-28 px-6">
@@ -96,11 +71,16 @@ export default function BookingForm() {
 
           <form onSubmit={handleSubmit} className="mt-8 flex flex-col gap-5">
             <div>
-              <label className="block text-sm font-heading uppercase tracking-wider text-brown-light mb-1">
+              <label
+                htmlFor="booking-name"
+                className="block text-sm font-heading uppercase tracking-wider text-brown-light mb-1"
+              >
                 {t("booking.name")}
               </label>
               <input
+                id="booking-name"
                 type="text"
+                required
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 className={inputClass}
@@ -108,11 +88,18 @@ export default function BookingForm() {
             </div>
 
             <div>
-              <label className="block text-sm font-heading uppercase tracking-wider text-brown-light mb-1">
+              <label
+                htmlFor="booking-phone"
+                className="block text-sm font-heading uppercase tracking-wider text-brown-light mb-1"
+              >
                 {t("booking.phone")}
               </label>
               <input
+                id="booking-phone"
                 type="tel"
+                required
+                pattern="[0-9]{10}"
+                title="Please enter a 10-digit phone number"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 className={inputClass}
@@ -120,10 +107,14 @@ export default function BookingForm() {
             </div>
 
             <div>
-              <label className="block text-sm font-heading uppercase tracking-wider text-brown-light mb-1">
+              <label
+                htmlFor="booking-service"
+                className="block text-sm font-heading uppercase tracking-wider text-brown-light mb-1"
+              >
                 {t("booking.service")}
               </label>
               <select
+                id="booking-service"
                 value={service}
                 onChange={(e) => setService(e.target.value)}
                 className={inputClass}
@@ -138,10 +129,14 @@ export default function BookingForm() {
             </div>
 
             <div>
-              <label className="block text-sm font-heading uppercase tracking-wider text-brown-light mb-1">
+              <label
+                htmlFor="booking-date"
+                className="block text-sm font-heading uppercase tracking-wider text-brown-light mb-1"
+              >
                 {t("booking.date")}
               </label>
               <input
+                id="booking-date"
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
@@ -150,10 +145,14 @@ export default function BookingForm() {
             </div>
 
             <div>
-              <label className="block text-sm font-heading uppercase tracking-wider text-brown-light mb-1">
+              <label
+                htmlFor="booking-notes"
+                className="block text-sm font-heading uppercase tracking-wider text-brown-light mb-1"
+              >
                 {t("booking.notes")}
               </label>
               <textarea
+                id="booking-notes"
                 rows={4}
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
@@ -189,7 +188,7 @@ export default function BookingForm() {
         {/* Right: Business info */}
         <div>
           <h2 className="font-heading text-3xl font-semibold uppercase tracking-widest text-brown">
-            {expectHeading}
+            {t("booking.expectHeading")}
           </h2>
           <div className="w-16 h-px bg-gold mt-4" />
 
@@ -197,17 +196,7 @@ export default function BookingForm() {
           <div className="mt-8 flex flex-col gap-4">
             {expectItems.map((item) => (
               <div key={item} className="flex items-start gap-3">
-                <svg
-                  className="w-5 h-5 text-gold flex-shrink-0 mt-0.5"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                    clipRule="evenodd"
-                  />
-                </svg>
+                <CheckIcon className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
                 <span className="text-brown-light">{item}</span>
               </div>
             ))}
@@ -219,33 +208,12 @@ export default function BookingForm() {
               href={`tel:${businessInfo.phone}`}
               className="flex items-start gap-3 text-brown-light text-sm hover:text-gold transition-colors"
             >
-              <svg
-                className="w-5 h-5 text-gold flex-shrink-0"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" />
-              </svg>
+              <PhoneIcon className="w-5 h-5 text-gold flex-shrink-0" />
               <span>{businessInfo.phone}</span>
             </a>
 
             <div className="flex items-start gap-3 text-brown-light text-sm">
-              <svg
-                className="w-5 h-5 text-gold flex-shrink-0"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <circle cx="12" cy="12" r="10" />
-                <polyline points="12 6 12 12 16 14" />
-              </svg>
+              <ClockIcon className="w-5 h-5 text-gold flex-shrink-0" />
               <span>
                 {t("footer.weekdays")}: {businessInfo.hours.weekdays}
                 <br />
@@ -254,19 +222,8 @@ export default function BookingForm() {
             </div>
 
             <div className="flex items-start gap-3 text-brown-light text-sm">
-              <svg
-                className="w-5 h-5 text-gold flex-shrink-0"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
-                <circle cx="12" cy="10" r="3" />
-              </svg>
-              <span>{fullAddress}</span>
+              <MapPinIcon className="w-5 h-5 text-gold flex-shrink-0" />
+              <span>{businessInfo.fullAddress}</span>
             </div>
           </div>
         </div>

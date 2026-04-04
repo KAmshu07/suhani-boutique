@@ -6,6 +6,7 @@ import { useScrollAnimation } from "@/lib/use-scroll-animation";
 import { getWhatsAppUrl } from "@/lib/whatsapp";
 import { SECTION_ID } from "@/data/constants";
 import { businessInfo } from "@/data/business-info";
+import { MessageIcon, PhoneIcon, MapPinIcon, ClockIcon } from "@/components/icons";
 
 export default function Contact() {
   const { t, language } = useTranslation();
@@ -15,15 +16,6 @@ export default function Contact() {
   const [phone, setPhone] = useState("");
   const [message, setMessage] = useState("");
   const [sent, setSent] = useState(false);
-
-  const heading =
-    language === "hi"
-      ? "संपर्क करें"
-      : language === "cg"
-        ? "संपर्क करव"
-        : "Get in Touch";
-
-  const fullAddress = `${businessInfo.address.line1}, ${businessInfo.address.line2} - ${businessInfo.address.pincode}`;
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -45,7 +37,7 @@ export default function Contact() {
         {/* Heading */}
         <div className="text-center">
           <h2 className="font-heading text-3xl font-semibold uppercase tracking-widest text-brown">
-            {heading}
+            {t("contact.heading")}
           </h2>
           <div className="w-16 h-px bg-gold mx-auto mt-4" />
         </div>
@@ -61,17 +53,7 @@ export default function Contact() {
               rel="noopener noreferrer"
               className="flex items-start gap-3 group"
             >
-              <svg
-                className="w-5 h-5 text-gold flex-shrink-0 mt-0.5"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z" />
-              </svg>
+              <MessageIcon className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
               <div>
                 <div className="text-sm font-heading uppercase tracking-wider text-brown group-hover:text-gold transition-colors">
                   {t("common.whatsapp")}
@@ -87,17 +69,7 @@ export default function Contact() {
               href={`tel:${businessInfo.phone}`}
               className="flex items-start gap-3 group"
             >
-              <svg
-                className="w-5 h-5 text-gold flex-shrink-0 mt-0.5"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" />
-              </svg>
+              <PhoneIcon className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
               <div>
                 <div className="text-sm font-heading uppercase tracking-wider text-brown group-hover:text-gold transition-colors">
                   {t("common.call")}
@@ -110,35 +82,13 @@ export default function Contact() {
 
             {/* Address */}
             <div className="flex items-start gap-3">
-              <svg
-                className="w-5 h-5 text-gold flex-shrink-0 mt-0.5"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
-                <circle cx="12" cy="10" r="3" />
-              </svg>
-              <span className="text-sm text-brown-light">{fullAddress}</span>
+              <MapPinIcon className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+              <span className="text-sm text-brown-light">{businessInfo.fullAddress}</span>
             </div>
 
             {/* Hours */}
             <div className="flex items-start gap-3">
-              <svg
-                className="w-5 h-5 text-gold flex-shrink-0 mt-0.5"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <circle cx="12" cy="12" r="10" />
-                <polyline points="12 6 12 12 16 14" />
-              </svg>
+              <ClockIcon className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
               <div className="text-sm text-brown-light">
                 <div>
                   {t("footer.weekdays")}: {businessInfo.hours.weekdays}
@@ -152,20 +102,9 @@ export default function Contact() {
 
           {/* Column 2: Map placeholder */}
           <div className="aspect-square md:aspect-auto md:h-full bg-cream-alt border border-brown-light/10 flex flex-col items-center justify-center gap-4">
-            <svg
-              className="w-16 h-16 text-gold/30"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
-              <circle cx="12" cy="10" r="3" />
-            </svg>
+            <MapPinIcon className="w-16 h-16 text-gold/30" />
             <span className="font-heading uppercase tracking-widest text-brown-light/30 text-sm">
-              Map Coming Soon
+              {t("contact.mapPlaceholder")}
             </span>
           </div>
 
@@ -173,11 +112,16 @@ export default function Contact() {
           <div>
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
               <div>
-                <label className="block text-sm font-heading uppercase tracking-wider text-brown-light mb-1">
+                <label
+                  htmlFor="contact-name"
+                  className="block text-sm font-heading uppercase tracking-wider text-brown-light mb-1"
+                >
                   {t("booking.name")}
                 </label>
                 <input
+                  id="contact-name"
                   type="text"
+                  required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   className={inputClass}
@@ -185,11 +129,18 @@ export default function Contact() {
               </div>
 
               <div>
-                <label className="block text-sm font-heading uppercase tracking-wider text-brown-light mb-1">
+                <label
+                  htmlFor="contact-phone"
+                  className="block text-sm font-heading uppercase tracking-wider text-brown-light mb-1"
+                >
                   {t("booking.phone")}
                 </label>
                 <input
+                  id="contact-phone"
                   type="tel"
+                  required
+                  pattern="[0-9]{10}"
+                  title="Please enter a 10-digit phone number"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   className={inputClass}
@@ -197,10 +148,14 @@ export default function Contact() {
               </div>
 
               <div>
-                <label className="block text-sm font-heading uppercase tracking-wider text-brown-light mb-1">
+                <label
+                  htmlFor="contact-message"
+                  className="block text-sm font-heading uppercase tracking-wider text-brown-light mb-1"
+                >
                   {t("booking.notes")}
                 </label>
                 <textarea
+                  id="contact-message"
                   rows={3}
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
@@ -217,7 +172,7 @@ export default function Contact() {
 
               {sent && (
                 <div className="bg-gold/10 text-gold p-4 text-center text-sm">
-                  {t("booking.success")}
+                  {t("contact.messageSent")}
                 </div>
               )}
             </form>

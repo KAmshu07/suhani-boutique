@@ -10,10 +10,10 @@
   --color-gold-hover: #A87B52;
   --color-whatsapp: #25D366;
 
-  /* Typography — next/font CSS variables */
-  --font-heading: var(--font-heading);
-  --font-body: var(--font-body);
-  --font-hindi: var(--font-hindi);
+  /* Typography — must match next/font variable names from layout.tsx */
+  --font-heading: "Josefin Sans", sans-serif;
+  --font-body: "Poppins", sans-serif;
+  --font-hindi: "Tiro Devanagari Hindi", serif;
 }
 
 /* Smooth scroll for anchor navigation */

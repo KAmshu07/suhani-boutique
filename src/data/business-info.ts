@@ -28,4 +28,5 @@ export const businessInfo = {
     hi: "नमस्ते! मुझे आपकी टेलरिंग सेवाओं में रुचि है। क्या आप मदद कर सकते हैं?",
     cg: "नमस्ते! मोला तुंहर टेलरिंग सेवा म रुचि हे। का तुमन मदद कर सकथव?",
   },
+  fullAddress: "Suhani Boutique, Raipur, Chhattisgarh 492001, India",
 } as const;

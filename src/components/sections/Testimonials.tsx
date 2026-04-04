@@ -7,37 +7,33 @@ import { SECTION_ID, ANIMATION } from "@/data/constants";
 import { testimonials } from "@/data/testimonials";
 
 export default function Testimonials() {
-  const { language } = useTranslation();
+  const { t, language } = useTranslation();
   const { ref, isVisible } = useScrollAnimation();
   const [activeIndex, setActiveIndex] = useState(0);
   const [fade, setFade] = useState(true);
-
-  const heading =
-    language === "hi"
-      ? "हमारे ग्राहक क्या कहते हैं"
-      : language === "cg"
-        ? "हमर ग्राहक का कहिथें"
-        : "What Our Clients Say";
+  const [paused, setPaused] = useState(false);
 
   // Auto-rotate testimonials
   useEffect(() => {
+    if (paused) return;
     const interval = setInterval(() => {
       setFade(false);
       setTimeout(() => {
         setActiveIndex((prev) => (prev + 1) % testimonials.length);
         setFade(true);
-      }, 300);
+      }, ANIMATION.TESTIMONIAL_FADE);
     }, ANIMATION.TESTIMONIAL_INTERVAL);
     return () => clearInterval(interval);
-  }, []);
+  }, [paused]);
 
   function goTo(index: number) {
     if (index === activeIndex) return;
+    setPaused(true);
     setFade(false);
     setTimeout(() => {
       setActiveIndex(index);
       setFade(true);
-    }, 300);
+    }, ANIMATION.TESTIMONIAL_FADE);
   }
 
   const current = testimonials[activeIndex];
@@ -53,7 +49,7 @@ export default function Testimonials() {
         {/* Heading */}
         <div className="text-center">
           <h2 className="font-heading text-3xl font-semibold uppercase tracking-widest text-brown">
-            {heading}
+            {t("testimonials.heading")}
           </h2>
           <div className="w-16 h-px bg-gold mx-auto mt-4" />
         </div>
@@ -81,7 +77,10 @@ export default function Testimonials() {
             </div>
 
             {/* Star rating */}
-            <div className="text-gold text-sm mt-3">
+            <div
+              className="text-gold text-sm mt-3"
+              aria-label={`${current.rating} ${t("a11y.starRating")}`}
+            >
               {Array.from({ length: current.rating }, (_, i) => (
                 <span key={i}>&#9733;</span>
               ))}

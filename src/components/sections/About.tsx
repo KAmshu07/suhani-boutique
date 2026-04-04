@@ -5,51 +5,13 @@ import { useScrollAnimation } from "@/lib/use-scroll-animation";
 import { SECTION_ID } from "@/data/constants";
 
 export default function About() {
-  const { language } = useTranslation();
+  const { t } = useTranslation();
   const { ref, isVisible } = useScrollAnimation();
 
-  const heading =
-    language === "hi"
-      ? "हमारी कहानी"
-      : language === "cg"
-        ? "हमर कहानी"
-        : "Our Story";
-
-  const story =
-    language === "hi"
-      ? "20 से अधिक वर्षों की टेलरिंग विशेषज्ञता के साथ, सुहानी बुटीक बिहार से रायपुर के दिल तक बेहतरीन सिलाई की कला लाता है। हम जो भी कपड़ा बनाते हैं, वह समर्पण, सटीकता और शिल्प के प्रति प्रेम की कहानी कहता है।"
-      : language === "cg"
-        ? "20 से जादा बरस के टेलरिंग अनुभव के साथ, सुहानी बुटीक बिहार ले रायपुर के दिल तक बढ़िया सिलाई के कला लाथे। हमन जऊन भी कपड़ा बनाथन, वो समर्पण, सटीकता अउ शिल्प के प्रेम के कहानी कहिथे।"
-        : "With over 20 years of tailoring expertise, Suhani Boutique brings the art of fine stitching from Bihar to the heart of Raipur. Every piece we create tells a story of dedication, precision, and love for the craft. From bridal lehengas to everyday alterations, we treat every garment with the same care and attention to detail.";
-
   const stats = [
-    {
-      value: "20+",
-      label:
-        language === "hi"
-          ? "वर्षों का अनुभव"
-          : language === "cg"
-            ? "बरस के अनुभव"
-            : "Years Experience",
-    },
-    {
-      value: "1000+",
-      label:
-        language === "hi"
-          ? "खुश ग्राहक"
-          : language === "cg"
-            ? "खुश ग्राहक"
-            : "Happy Customers",
-    },
-    {
-      value: "6",
-      label:
-        language === "hi"
-          ? "विशेषताएं"
-          : language === "cg"
-            ? "विशेषता मन"
-            : "Specialties",
-    },
+    { value: "20+", label: t("about.stat.experience") },
+    { value: "1000+", label: t("about.stat.customers") },
+    { value: "6", label: t("about.stat.specialties") },
   ];
 
   return (
@@ -75,7 +37,7 @@ export default function About() {
           />
           <div className="absolute inset-0 flex items-center justify-center">
             <span className="font-heading uppercase tracking-widest text-brown-light/30 text-sm">
-              Photo Coming Soon
+              {t("about.photoPlaceholder")}
             </span>
           </div>
         </div>
@@ -89,10 +51,10 @@ export default function About() {
           }`}
         >
           <h2 className="font-heading text-3xl font-semibold uppercase tracking-widest text-brown">
-            {heading}
+            {t("about.heading")}
           </h2>
           <div className="w-16 h-px bg-gold mt-4 mb-8" />
-          <p className="text-brown-light leading-relaxed">{story}</p>
+          <p className="text-brown-light leading-relaxed">{t("about.story")}</p>
 
           {/* Stats */}
           <div className="mt-10 flex gap-8 md:gap-12">
