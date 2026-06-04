@@ -115,3 +115,30 @@ customers, per-garment status, reporting/analytics. (All future.)
 ## 11. Blockers
 
 - **One DB migration** to apply (`npx supabase db push` from `C:\Nimrita\Personal\suhani-boutique`).
+
+## 12. Review refinements (folded in from the adversarial review)
+
+- **Dual status rule (clarified):** `orders.status` and `order_items.status` are BOTH freely
+  settable and independent — divergence is allowed and expected ("lehenga ready, blouse in
+  progress"). `orders.status` is the headline and the source for WhatsApp updates. "Apply to all
+  garments" sets every item to the order's current status. **No DB-enforced transition rules** —
+  Mom can move to any stage (including backward); real shops skip/repeat stages.
+- **Order number:** `orders.order_no bigint generated always as identity` (unique, human "#123")
+  for handoff and the WhatsApp message.
+- **Priority:** `orders.is_rush boolean default false` (shown in the list).
+- **Money precision:** all amounts `numeric(10,2)` (`order_items.price`, `payments.amount`).
+- **Payments insert/delete only** (append-only) — no `updated_at`/update trigger; a wrong entry is
+  deleted and re-added. `payments.note` records a discount/adjustment/refund (negative amount + note).
+- **Two fetch shapes** in `orders-admin.ts`: `listOrders()` (lean: order + customer + computed
+  total/paid/balance) for the list; `getOrderDetail(id)` (full nested items + payments) for detail.
+- **Orders list quick filters:** status PLUS **Due today**, **Overdue** (due_date < today, not
+  delivered), **Unpaid** (balance > 0). Balance shown prominently (red when owed).
+- **WhatsApp safeguard:** confirm "Send to <name> (<phone>)?" before opening WhatsApp. Default
+  message per status in `data/order-messages.ts` (Hindi, friendly, includes the order number); Mom
+  edits before sending.
+- **Lead → order:** find-or-create customer by phone; if the phone exists, use that customer and
+  show its name (never silently rename).
+- **Customer delete guard:** FK RESTRICT means a customer with orders can't be deleted; the UI
+  catches it → "Cannot delete — this customer has orders."
+- **Deferred (documented limits):** bulk/lump-sum payment split across orders (v1 is per-order);
+  structured measurements; per-garment WhatsApp; URL-routed sections; fitting-date scheduling.
