@@ -29,6 +29,9 @@ export default function Hero() {
       {/* Dark overlay */}
       <div className="absolute inset-0 bg-brown/40" />
 
+      {/* Top scrim — keeps the transparent navbar legible over any hero image */}
+      <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-brown/60 to-transparent pointer-events-none" />
+
       {/* Subtle geometric pattern overlay */}
       <div
         className="absolute inset-0 opacity-[0.04] pointer-events-none"

@@ -51,10 +51,10 @@ export default function Navbar() {
   return (
     <>
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 text-brown transition-all duration-300 ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           scrolled
-            ? "bg-white shadow-md"
-            : "bg-transparent"
+            ? "bg-white text-brown shadow-md"
+            : "bg-transparent text-cream"
         }`}
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
@@ -114,13 +114,13 @@ export default function Navbar() {
             aria-expanded={menuOpen}
           >
             <span
-              className={`block h-0.5 w-6 bg-brown transition-all duration-300 ${menuOpen ? "translate-y-2 rotate-45" : ""}`}
+              className={`block h-0.5 w-6 bg-current transition-all duration-300 ${menuOpen ? "translate-y-2 rotate-45" : ""}`}
             />
             <span
-              className={`block h-0.5 w-6 bg-brown transition-all duration-300 ${menuOpen ? "opacity-0" : ""}`}
+              className={`block h-0.5 w-6 bg-current transition-all duration-300 ${menuOpen ? "opacity-0" : ""}`}
             />
             <span
-              className={`block h-0.5 w-6 bg-brown transition-all duration-300 ${menuOpen ? "-translate-y-2 -rotate-45" : ""}`}
+              className={`block h-0.5 w-6 bg-current transition-all duration-300 ${menuOpen ? "-translate-y-2 -rotate-45" : ""}`}
             />
           </button>
         </div>
