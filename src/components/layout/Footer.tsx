@@ -92,10 +92,7 @@ export default function Footer() {
                   {t("footer.hours")}
                 </span>
                 <span className="mt-1 block">
-                  {t("footer.weekdays")}: {businessInfo.hours.weekdays}
-                </span>
-                <span className="block">
-                  {t("footer.sunday")}: {businessInfo.hours.sunday}
+                  {t("footer.openDaily")}: {businessInfo.hours.time}
                 </span>
               </li>
             </ul>

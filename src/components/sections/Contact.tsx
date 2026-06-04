@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useTranslation } from "@/lib/i18n";
 import { useScrollReveal } from "@/lib/use-scroll-animation";
-import { getWhatsAppUrl } from "@/lib/whatsapp";
+import { getWhatsAppUrl, buildWhatsAppMessage } from "@/lib/whatsapp";
 import { SECTION_ID } from "@/data/constants";
 import { businessInfo } from "@/data/business-info";
 import { MessageIcon, PhoneIcon, MapPinIcon, ClockIcon } from "@/components/icons";
@@ -19,6 +19,12 @@ export default function Contact() {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    const text = buildWhatsAppMessage(businessInfo.whatsappGreeting[language], [
+      { label: t("booking.whatsappLabel.name"), value: name },
+      { label: t("booking.whatsappLabel.phone"), value: phone },
+      { label: t("booking.whatsappLabel.notes"), value: message },
+    ]);
+    window.open(getWhatsAppUrl(text), "_blank", "noopener");
     setSent(true);
     setTimeout(() => setSent(false), 5000);
   }
@@ -88,23 +94,31 @@ export default function Contact() {
             <div className="flex items-start gap-3">
               <ClockIcon className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
               <div className="text-sm text-brown-light">
-                <div>
-                  {t("footer.weekdays")}: {businessInfo.hours.weekdays}
-                </div>
-                <div>
-                  {t("footer.sunday")}: {businessInfo.hours.sunday}
-                </div>
+                {t("footer.openDaily")}: {businessInfo.hours.time}
               </div>
             </div>
           </div>
 
-          {/* Column 2: Map placeholder */}
-          <div className="aspect-square md:aspect-auto md:h-full bg-cream-alt border border-brown-light/10 flex flex-col items-center justify-center gap-4">
-            <MapPinIcon className="w-16 h-16 text-gold/30" />
-            <span className="font-heading uppercase tracking-widest text-brown-light/30 text-sm">
-              {t("contact.mapPlaceholder")}
+          {/* Column 2: Map — click anywhere opens the location in Google Maps */}
+          <a
+            href={businessInfo.mapsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={t("contact.viewOnMap")}
+            className="relative block aspect-square md:aspect-auto md:h-full overflow-hidden border border-brown-light/10"
+          >
+            <iframe
+              src={businessInfo.mapEmbedSrc}
+              title={t("contact.viewOnMap")}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              className="pointer-events-none h-full w-full min-h-[300px]"
+            />
+            <span className="absolute bottom-3 left-3 flex items-center gap-2 bg-cream/90 px-3 py-1.5 text-xs font-heading uppercase tracking-wider text-brown shadow-sm">
+              <MapPinIcon className="w-4 h-4 text-gold" />
+              {t("contact.viewOnMap")}
             </span>
-          </div>
+          </a>
 
           {/* Column 3: Quick contact form */}
           <div>

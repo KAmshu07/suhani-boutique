@@ -55,8 +55,7 @@ export const translations = {
     "footer.quickLinks": "Quick Links",
     "footer.contactInfo": "Contact Info",
     "footer.hours": "Hours",
-    "footer.weekdays": "Mon – Sat",
-    "footer.sunday": "Sunday",
+    "footer.openDaily": "Open Daily",
     "footer.crafted": "Crafted with care in Raipur",
     "footer.copyright": "All rights reserved.",
 
@@ -87,7 +86,7 @@ export const translations = {
 
     // Contact
     "contact.heading": "Get in Touch",
-    "contact.mapPlaceholder": "Map Coming Soon",
+    "contact.viewOnMap": "View on Google Maps",
     "contact.messageSent": "Message sent! We'll get back to you soon.",
 
     // Services
@@ -170,8 +169,7 @@ export const translations = {
     "footer.quickLinks": "त्वरित लिंक",
     "footer.contactInfo": "संपर्क जानकारी",
     "footer.hours": "समय",
-    "footer.weekdays": "सोम – शनि",
-    "footer.sunday": "रविवार",
+    "footer.openDaily": "रोज़ खुला",
     "footer.crafted": "रायपुर में प्यार से बनाया गया",
     "footer.copyright": "सर्वाधिकार सुरक्षित।",
 
@@ -202,7 +200,7 @@ export const translations = {
 
     // Contact
     "contact.heading": "संपर्क करें",
-    "contact.mapPlaceholder": "मैप जल्द आ रहा है",
+    "contact.viewOnMap": "Google Maps पर देखें",
     "contact.messageSent": "संदेश भेजा गया! हम जल्दी ही आपसे संपर्क करेंगे।",
 
     // Services
@@ -285,8 +283,7 @@ export const translations = {
     "footer.quickLinks": "जल्दी लिंक",
     "footer.contactInfo": "संपर्क जानकारी",
     "footer.hours": "समय",
-    "footer.weekdays": "सोम – शनि",
-    "footer.sunday": "रविवार",
+    "footer.openDaily": "रोज खुला हे",
     "footer.crafted": "रायपुर म प्यार से बनाए गीस",
     "footer.copyright": "सब अधिकार सुरक्षित।",
 
@@ -317,7 +314,7 @@ export const translations = {
 
     // Contact
     "contact.heading": "संपर्क करव",
-    "contact.mapPlaceholder": "मैप जल्दी आवत हे",
+    "contact.viewOnMap": "Google Maps म देखव",
     "contact.messageSent": "संदेश भेजे गीस! हमन जल्दी तुंहर ले संपर्क करबो।",
 
     // Services

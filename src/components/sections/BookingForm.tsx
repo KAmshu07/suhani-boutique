@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useTranslation } from "@/lib/i18n";
 import { useScrollReveal } from "@/lib/use-scroll-animation";
-import { getWhatsAppUrl } from "@/lib/whatsapp";
+import { getWhatsAppUrl, buildWhatsAppMessage } from "@/lib/whatsapp";
 import { SECTION_ID } from "@/data/constants";
 import { services } from "@/data/services";
 import { businessInfo } from "@/data/business-info";
@@ -30,25 +30,17 @@ export default function BookingForm() {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    const serviceName = service ? t(`services.${service}`) : "";
+    const text = buildWhatsAppMessage(businessInfo.whatsappGreeting[language], [
+      { label: t("booking.whatsappLabel.name"), value: name },
+      { label: t("booking.whatsappLabel.phone"), value: phone },
+      { label: t("booking.whatsappLabel.service"), value: serviceName },
+      { label: t("booking.whatsappLabel.date"), value: date },
+      { label: t("booking.whatsappLabel.notes"), value: message },
+    ]);
+    window.open(getWhatsAppUrl(text), "_blank", "noopener");
     setSuccess(true);
     setTimeout(() => setSuccess(false), 5000);
-  }
-
-  function handleWhatsApp() {
-    const serviceName = service ? t(`services.${service}`) : "";
-    const parts = [
-      name && `${t("booking.whatsappLabel.name")}: ${name}`,
-      phone && `${t("booking.whatsappLabel.phone")}: ${phone}`,
-      serviceName && `${t("booking.whatsappLabel.service")}: ${serviceName}`,
-      date && `${t("booking.whatsappLabel.date")}: ${date}`,
-      message && `${t("booking.whatsappLabel.notes")}: ${message}`,
-    ].filter(Boolean);
-
-    const text = parts.length
-      ? `${businessInfo.whatsappGreeting[language]}\n\n${parts.join("\n")}`
-      : businessInfo.whatsappGreeting[language];
-
-    window.open(getWhatsAppUrl(text), "_blank", "noopener");
   }
 
   const inputClass =
@@ -158,20 +150,13 @@ export default function BookingForm() {
               />
             </div>
 
-            {/* Submit buttons */}
-            <div className="mt-6 flex flex-col sm:flex-row gap-4">
+            {/* Submit — opens WhatsApp pre-filled with the details above */}
+            <div className="mt-6">
               <button
                 type="submit"
-                className="bg-gold text-cream px-8 py-3 font-heading uppercase tracking-wider text-sm hover:bg-brown transition-colors"
-              >
-                {t("booking.submit")}
-              </button>
-              <button
-                type="button"
-                onClick={handleWhatsApp}
                 className="bg-whatsapp text-white px-8 py-3 font-heading uppercase tracking-wider text-sm hover:opacity-90 transition-opacity"
               >
-                {t("common.whatsapp")}
+                {t("booking.submit")}
               </button>
             </div>
 
@@ -213,9 +198,7 @@ export default function BookingForm() {
             <div className="flex items-start gap-3 text-brown-light text-sm">
               <ClockIcon className="w-5 h-5 text-gold flex-shrink-0" />
               <span>
-                {t("footer.weekdays")}: {businessInfo.hours.weekdays}
-                <br />
-                {t("footer.sunday")}: {businessInfo.hours.sunday}
+                {t("footer.openDaily")}: {businessInfo.hours.time}
               </span>
             </div>
 

@@ -15,7 +15,7 @@ export default function Testimonials() {
 
   // Auto-rotate testimonials
   useEffect(() => {
-    if (paused) return;
+    if (paused || testimonials.length === 0) return;
     const interval = setInterval(() => {
       setFade(false);
       setTimeout(() => {
@@ -35,6 +35,8 @@ export default function Testimonials() {
       setFade(true);
     }, ANIMATION.TESTIMONIAL_FADE);
   }
+
+  if (testimonials.length === 0) return null;
 
   const current = testimonials[activeIndex];
 
