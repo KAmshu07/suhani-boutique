@@ -17,6 +17,11 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "images.unsplash.com",
       },
+      {
+        // Mom's uploaded images live in Supabase Storage.
+        protocol: "https",
+        hostname: "riyviuoixhazwekcptzq.supabase.co",
+      },
     ],
   },
 };
