@@ -4,7 +4,32 @@ import { useTranslation } from "@/lib/i18n";
 import { useScrollReveal } from "@/lib/use-scroll-animation";
 import { getWhatsAppUrl } from "@/lib/whatsapp";
 import { SECTION_ID } from "@/data/constants";
-import { services } from "@/data/services";
+import { services as serviceData } from "@/data/services";
+import { translations } from "@/data/translations";
+import { getServices } from "@/lib/content";
+import { useLiveContent } from "@/lib/use-content";
+import { getLocalizedField, type Localized } from "@/lib/localized";
+
+// Normalized shape the cards render — works for both DB rows and the static
+// fallback below. Fallback names come from translations so the section looks
+// identical before live data loads.
+type ServiceItem = {
+  slug: string;
+  name: Partial<Localized>;
+  price: string | null;
+  icon: string | null;
+};
+
+const SERVICE_FALLBACK: ServiceItem[] = serviceData.map((s) => ({
+  slug: s.key,
+  name: {
+    en: translations.en[`services.${s.key}`],
+    hi: translations.hi[`services.${s.key}`],
+    cg: translations.cg[`services.${s.key}`],
+  },
+  price: s.priceRange,
+  icon: s.icon,
+}));
 
 function ServiceIcon({ name }: { name: string }) {
   const cls = "w-10 h-10 text-gold stroke-current";
@@ -62,8 +87,9 @@ function ServiceIcon({ name }: { name: string }) {
 }
 
 export default function Services() {
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
   const ref = useScrollReveal();
+  const { data: items } = useLiveContent(getServices, SERVICE_FALLBACK);
 
   return (
     <section id={SECTION_ID.SERVICES} className="bg-cream-alt py-20 md:py-28 px-6">
@@ -79,23 +105,23 @@ export default function Services() {
 
         {/* Service cards grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {services.map((service) => {
-            const serviceName = t(`services.${service.key}`);
+          {items.map((service) => {
+            const serviceName = getLocalizedField(service.name, language);
             const whatsappUrl = getWhatsAppUrl(
               t("services.whatsappInquiry") + " " + serviceName
             );
 
             return (
               <div
-                key={service.key}
+                key={service.slug}
                 className="stagger-child bg-cream rounded-none p-8 hover:shadow-lg transition-shadow"
               >
-                <ServiceIcon name={service.icon} />
+                <ServiceIcon name={service.icon ?? ""} />
                 <h3 className="font-heading text-lg font-semibold uppercase tracking-wider text-brown mt-4">
                   {serviceName}
                 </h3>
                 <p className="text-sm text-brown-light mt-2">
-                  {`\u20B9${service.priceRange}`}
+                  {service.price ? `\u20B9${service.price}` : ""}
                 </p>
                 <a
                   href={whatsappUrl}
