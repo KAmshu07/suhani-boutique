@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import type { Session } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabase";
 import { businessInfo } from "@/data/business-info";
+import GalleryEditor from "@/components/admin/editors/GalleryEditor";
 
 // Admin shell. Two layers of protection: (1) the database RLS only lets the
 // 'admin' role read/write real data, and (2) this UI only shows the dashboard
@@ -150,39 +151,61 @@ function NotAuthorized({ email }: { email: string }) {
   );
 }
 
+const SECTIONS = [
+  { key: "gallery", label: "Gallery" },
+  { key: "services", label: "Services" },
+  { key: "announcement", label: "Announcement" },
+  { key: "business", label: "Business Info" },
+  { key: "about", label: "About" },
+  { key: "hero", label: "Hero Image" },
+  { key: "testimonials", label: "Reviews" },
+] as const;
+
 function Dashboard({ email }: { email: string }) {
+  const [section, setSection] = useState<string>("gallery");
   return (
     <main className="min-h-screen bg-cream text-brown">
       <header className="flex items-center justify-between border-b border-brown-light/15 px-6 py-4">
         <h1 className="font-heading text-lg font-semibold uppercase tracking-widest">
           {businessInfo.name} Admin
         </h1>
-        <button
-          onClick={() => supabase.auth.signOut()}
-          className="text-sm font-heading uppercase tracking-wider text-brown-light hover:text-gold transition-colors"
-        >
-          Log out
-        </button>
+        <div className="flex items-center gap-4">
+          <span className="hidden sm:inline text-xs text-brown-light">{email}</span>
+          <button
+            onClick={() => supabase.auth.signOut()}
+            className="text-sm font-heading uppercase tracking-wider text-brown-light hover:text-gold transition-colors"
+          >
+            Log out
+          </button>
+        </div>
       </header>
-      <div className="px-6 py-8 max-w-3xl mx-auto">
-        <p className="text-sm text-brown-light">Signed in as {email}</p>
-        <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <Placeholder title="Site Control" desc="Edit photos, services, prices, and announcements." />
-          <Placeholder title="Order Book" desc="Manage customers and orders." />
+      <div className="flex flex-col md:flex-row">
+        <nav className="flex md:flex-col gap-1 overflow-x-auto border-b border-brown-light/15 p-3 md:w-48 md:shrink-0 md:border-b-0 md:border-r">
+          {SECTIONS.map((s) => (
+            <button
+              key={s.key}
+              onClick={() => setSection(s.key)}
+              className={`whitespace-nowrap px-3 py-2 text-left text-xs font-heading uppercase tracking-wider transition-colors ${
+                section === s.key ? "bg-gold text-cream" : "text-brown-light hover:text-gold"
+              }`}
+            >
+              {s.label}
+            </button>
+          ))}
+        </nav>
+        <div className="flex-1 p-6 max-w-3xl">
+          <SectionView section={section} />
         </div>
       </div>
     </main>
   );
 }
 
-function Placeholder({ title, desc }: { title: string; desc: string }) {
-  return (
-    <div className="bg-cream-alt border border-brown-light/15 p-6">
-      <h2 className="font-heading text-base font-semibold uppercase tracking-wider">{title}</h2>
-      <p className="text-sm text-brown-light mt-2">{desc}</p>
-      <span className="inline-block mt-4 text-xs font-heading uppercase tracking-wider text-gold">
-        Coming soon
-      </span>
-    </div>
-  );
+function SectionView({ section }: { section: string }) {
+  switch (section) {
+    case "gallery":
+      return <GalleryEditor />;
+    default:
+      return <p className="text-sm text-brown-light">This editor is coming up next.</p>;
+  }
 }
