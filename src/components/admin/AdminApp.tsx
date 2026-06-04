@@ -8,6 +8,7 @@ import GalleryEditor from "@/components/admin/editors/GalleryEditor";
 import ServicesEditor from "@/components/admin/editors/ServicesEditor";
 import AnnouncementEditor from "@/components/admin/editors/AnnouncementEditor";
 import BusinessInfoEditor from "@/components/admin/editors/BusinessInfoEditor";
+import AboutEditor from "@/components/admin/editors/AboutEditor";
 
 // Admin shell. Two layers of protection: (1) the database RLS only lets the
 // 'admin' role read/write real data, and (2) this UI only shows the dashboard
@@ -214,6 +215,8 @@ function SectionView({ section }: { section: string }) {
       return <AnnouncementEditor />;
     case "business":
       return <BusinessInfoEditor />;
+    case "about":
+      return <AboutEditor />;
     default:
       return <p className="text-sm text-brown-light">This editor is coming up next.</p>;
   }

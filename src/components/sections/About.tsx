@@ -4,15 +4,25 @@ import Image from "next/image";
 import { useTranslation } from "@/lib/i18n";
 import { useScrollReveal } from "@/lib/use-scroll-animation";
 import { SECTION_ID } from "@/data/constants";
+import { getSettings } from "@/lib/content";
+import { useLiveContent } from "@/lib/use-content";
+import { getLocalizedField } from "@/lib/localized";
+import { ABOUT_DEFAULTS, type AboutContent } from "@/lib/about-defaults";
+
+async function fetchAbout(): Promise<AboutContent> {
+  const s = await getSettings();
+  return (s.about as AboutContent) ?? ABOUT_DEFAULTS;
+}
 
 export default function About() {
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
   const ref = useScrollReveal();
+  const { data: about } = useLiveContent(fetchAbout, ABOUT_DEFAULTS);
 
   const stats = [
-    { value: "20+", label: t("about.stat.experience") },
-    { value: "1000+", label: t("about.stat.customers") },
-    { value: "6", label: t("about.stat.specialties") },
+    { value: about.stats?.experience ?? "", label: t("about.stat.experience") },
+    { value: about.stats?.customers ?? "", label: t("about.stat.customers") },
+    { value: about.stats?.specialties ?? "", label: t("about.stat.specialties") },
   ];
 
   return (
@@ -22,11 +32,9 @@ export default function About() {
         className="scroll-reveal grid grid-cols-1 md:grid-cols-2 gap-12 max-w-6xl mx-auto items-center"
       >
         {/* Left column: about image */}
-        <div
-          className="aspect-[3/4] relative overflow-hidden border-l-4 border-gold"
-        >
+        <div className="aspect-[3/4] relative overflow-hidden border-l-4 border-gold">
           <Image
-            src="https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=800&q=80"
+            src={about.image_url}
             alt="Suhani Boutique workspace"
             fill
             className="object-cover"
@@ -37,21 +45,17 @@ export default function About() {
         {/* Right column: text content */}
         <div>
           <h2 className="font-heading text-3xl font-semibold uppercase tracking-widest text-brown">
-            {t("about.heading")}
+            {getLocalizedField(about.heading, language)}
           </h2>
           <div className="w-16 h-px bg-gold mt-4 mb-8" />
-          <p className="text-brown-light leading-relaxed">{t("about.story")}</p>
+          <p className="text-brown-light leading-relaxed">{getLocalizedField(about.story, language)}</p>
 
           {/* Stats */}
           <div className="mt-10 flex gap-8 md:gap-12">
             {stats.map((stat) => (
-              <div key={stat.value}>
-                <div className="font-heading text-3xl font-bold text-gold">
-                  {stat.value}
-                </div>
-                <div className="text-sm text-brown-light mt-1">
-                  {stat.label}
-                </div>
+              <div key={stat.label}>
+                <div className="font-heading text-3xl font-bold text-gold">{stat.value}</div>
+                <div className="text-sm text-brown-light mt-1">{stat.label}</div>
               </div>
             ))}
           </div>

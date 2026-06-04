@@ -27,8 +27,21 @@ export async function getTestimonials() {
   return data ?? [];
 }
 
-export async function getSettings(): Promise<Record<string, unknown>> {
+async function fetchSettings(): Promise<Record<string, unknown>> {
   const { data, error } = await supabase.from("settings").select("key,value");
   if (error) throw error;
   return Object.fromEntries((data ?? []).map((r) => [r.key, r.value]));
+}
+
+// Cached for the page session so the several settings consumers (business info,
+// about, hero, announcement) share a single query. Cleared on failure to retry.
+let settingsPromise: Promise<Record<string, unknown>> | null = null;
+export function getSettings(): Promise<Record<string, unknown>> {
+  if (!settingsPromise) {
+    settingsPromise = fetchSettings().catch((e) => {
+      settingsPromise = null;
+      throw e;
+    });
+  }
+  return settingsPromise;
 }
