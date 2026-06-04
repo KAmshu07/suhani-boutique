@@ -11,6 +11,9 @@ import BusinessInfoEditor from "@/components/admin/editors/BusinessInfoEditor";
 import AboutEditor from "@/components/admin/editors/AboutEditor";
 import HeroEditor from "@/components/admin/editors/HeroEditor";
 import TestimonialsEditor from "@/components/admin/editors/TestimonialsEditor";
+import OrdersEditor from "@/components/admin/editors/OrdersEditor";
+import CustomersEditor from "@/components/admin/editors/CustomersEditor";
+import LeadsEditor from "@/components/admin/editors/LeadsEditor";
 
 // Admin shell. Two layers of protection: (1) the database RLS only lets the
 // 'admin' role read/write real data, and (2) this UI only shows the dashboard
@@ -157,18 +160,31 @@ function NotAuthorized({ email }: { email: string }) {
   );
 }
 
-const SECTIONS = [
-  { key: "gallery", label: "Gallery" },
-  { key: "services", label: "Services" },
-  { key: "announcement", label: "Announcement" },
-  { key: "business", label: "Business Info" },
-  { key: "about", label: "About" },
-  { key: "hero", label: "Hero Image" },
-  { key: "testimonials", label: "Reviews" },
+const NAV_GROUPS = [
+  {
+    group: "Order Book",
+    items: [
+      { key: "orders", label: "Orders" },
+      { key: "customers", label: "Customers" },
+      { key: "leads", label: "Leads" },
+    ],
+  },
+  {
+    group: "Site Control",
+    items: [
+      { key: "gallery", label: "Gallery" },
+      { key: "services", label: "Services" },
+      { key: "testimonials", label: "Reviews" },
+      { key: "announcement", label: "Announcement" },
+      { key: "business", label: "Business Info" },
+      { key: "about", label: "About" },
+      { key: "hero", label: "Hero Image" },
+    ],
+  },
 ] as const;
 
 function Dashboard({ email }: { email: string }) {
-  const [section, setSection] = useState<string>("gallery");
+  const [section, setSection] = useState<string>("orders");
   return (
     <main className="min-h-screen bg-cream text-brown">
       <header className="flex items-center justify-between border-b border-brown-light/15 px-6 py-4">
@@ -186,17 +202,24 @@ function Dashboard({ email }: { email: string }) {
         </div>
       </header>
       <div className="flex flex-col md:flex-row">
-        <nav className="flex md:flex-col gap-1 overflow-x-auto border-b border-brown-light/15 p-3 md:w-48 md:shrink-0 md:border-b-0 md:border-r">
-          {SECTIONS.map((s) => (
-            <button
-              key={s.key}
-              onClick={() => setSection(s.key)}
-              className={`whitespace-nowrap px-3 py-2 text-left text-xs font-heading uppercase tracking-wider transition-colors ${
-                section === s.key ? "bg-gold text-cream" : "text-brown-light hover:text-gold"
-              }`}
-            >
-              {s.label}
-            </button>
+        <nav className="flex md:flex-col gap-3 overflow-x-auto border-b border-brown-light/15 p-3 md:w-52 md:shrink-0 md:border-b-0 md:border-r">
+          {NAV_GROUPS.map((g) => (
+            <div key={g.group} className="flex md:flex-col gap-1">
+              <span className="hidden md:block px-3 pt-1 text-[10px] font-heading uppercase tracking-widest text-brown-light/50">
+                {g.group}
+              </span>
+              {g.items.map((s) => (
+                <button
+                  key={s.key}
+                  onClick={() => setSection(s.key)}
+                  className={`whitespace-nowrap px-3 py-2 text-left text-xs font-heading uppercase tracking-wider transition-colors ${
+                    section === s.key ? "bg-gold text-cream" : "text-brown-light hover:text-gold"
+                  }`}
+                >
+                  {s.label}
+                </button>
+              ))}
+            </div>
           ))}
         </nav>
         <div className="flex-1 p-6 max-w-3xl">
@@ -209,6 +232,12 @@ function Dashboard({ email }: { email: string }) {
 
 function SectionView({ section }: { section: string }) {
   switch (section) {
+    case "orders":
+      return <OrdersEditor />;
+    case "customers":
+      return <CustomersEditor />;
+    case "leads":
+      return <LeadsEditor />;
     case "gallery":
       return <GalleryEditor />;
     case "services":

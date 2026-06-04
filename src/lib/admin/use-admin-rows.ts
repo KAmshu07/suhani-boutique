@@ -65,3 +65,38 @@ export function useAdminSetting<T>(key: string, fallback: T) {
 
   return { value, setValue, status, setStatus };
 }
+
+// Loads any async data once (stable module-level fetcher) with a reload(). Used
+// where the shape doesn't fit useAdminRows (orders, customers, leads).
+export function useAsyncData<T>(fetcher: () => Promise<T>, fallback: T) {
+  const [data, setData] = useState<T>(fallback);
+  const [status, setStatus] = useState("Loading…");
+
+  function reload() {
+    return fetcher()
+      .then((d) => {
+        setData(d);
+        setStatus("");
+      })
+      .catch((e) => setStatus("Failed to load: " + msg(e)));
+  }
+
+  useEffect(() => {
+    let alive = true;
+    fetcher()
+      .then((d) => {
+        if (alive) {
+          setData(d);
+          setStatus("");
+        }
+      })
+      .catch((e) => {
+        if (alive) setStatus("Failed to load: " + msg(e));
+      });
+    return () => {
+      alive = false;
+    };
+  }, [fetcher]);
+
+  return { data, setData, status, setStatus, reload };
+}
