@@ -3,16 +3,18 @@
 import { useState } from "react";
 import { useTranslation } from "@/lib/i18n";
 import { useScrollReveal } from "@/lib/use-scroll-animation";
-import { getWhatsAppUrl, buildWhatsAppMessage } from "@/lib/whatsapp";
+import { buildWhatsAppMessage } from "@/lib/whatsapp";
 import { supabase } from "@/lib/supabase";
 import { SECTION_ID } from "@/data/constants";
 import { services } from "@/data/services";
-import { businessInfo } from "@/data/business-info";
+import { useBusinessInfo, useWhatsAppUrl } from "@/lib/business-info-context";
 import { CheckIcon, PhoneIcon, ClockIcon, MapPinIcon } from "@/components/icons";
 
 export default function BookingForm() {
   const { t, language } = useTranslation();
   const ref = useScrollReveal();
+  const businessInfo = useBusinessInfo();
+  const waUrl = useWhatsAppUrl();
 
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -51,7 +53,7 @@ export default function BookingForm() {
       .then(({ error }) => {
         if (error && process.env.NODE_ENV !== "production") console.warn("lead save failed", error);
       });
-    window.open(getWhatsAppUrl(text), "_blank", "noopener");
+    window.open(waUrl(text), "_blank", "noopener");
     setSuccess(true);
     setTimeout(() => setSuccess(false), 5000);
   }

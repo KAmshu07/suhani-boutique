@@ -2,7 +2,7 @@
 
 import { useTranslation } from "@/lib/i18n";
 import { useScrollReveal } from "@/lib/use-scroll-animation";
-import { getWhatsAppUrl } from "@/lib/whatsapp";
+import { useWhatsAppUrl } from "@/lib/business-info-context";
 import { SECTION_ID } from "@/data/constants";
 import { services as serviceData } from "@/data/services";
 import { translations } from "@/data/translations";
@@ -89,6 +89,7 @@ function ServiceIcon({ name }: { name: string }) {
 export default function Services() {
   const { t, language } = useTranslation();
   const ref = useScrollReveal();
+  const waUrl = useWhatsAppUrl();
   const { data: items } = useLiveContent(getServices, SERVICE_FALLBACK);
 
   return (
@@ -107,7 +108,7 @@ export default function Services() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
           {items.map((service) => {
             const serviceName = getLocalizedField(service.name, language);
-            const whatsappUrl = getWhatsAppUrl(
+            const whatsappUrl = waUrl(
               t("services.whatsappInquiry") + " " + serviceName
             );
 

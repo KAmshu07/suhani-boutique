@@ -2,8 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "@/lib/i18n";
-import { getWhatsAppUrl } from "@/lib/whatsapp";
-import { businessInfo } from "@/data/business-info";
+import { useBusinessInfo, useWhatsAppUrl } from "@/lib/business-info-context";
 import {
   LANGUAGE_LABELS,
   NAV_LINKS,
@@ -15,6 +14,8 @@ import { WhatsAppIcon } from "@/components/icons";
 
 export default function Navbar() {
   const { t, language, setLanguage } = useTranslation();
+  const businessInfo = useBusinessInfo();
+  const waUrl = useWhatsAppUrl();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -44,7 +45,7 @@ export default function Navbar() {
     [],
   );
 
-  const whatsappUrl = getWhatsAppUrl(
+  const whatsappUrl = waUrl(
     businessInfo.whatsappGreeting[language as keyof typeof businessInfo.whatsappGreeting],
   );
 

@@ -1,14 +1,15 @@
 "use client";
 
 import { useTranslation } from "@/lib/i18n";
-import { getWhatsAppUrl } from "@/lib/whatsapp";
-import { businessInfo } from "@/data/business-info";
+import { useBusinessInfo, useWhatsAppUrl } from "@/lib/business-info-context";
 import { WhatsAppIcon, PhoneIcon } from "@/components/icons";
 
 export default function MobileBottomBar() {
   const { t, language } = useTranslation();
+  const businessInfo = useBusinessInfo();
+  const waUrl = useWhatsAppUrl();
 
-  const whatsappUrl = getWhatsAppUrl(
+  const whatsappUrl = waUrl(
     businessInfo.whatsappGreeting[language as keyof typeof businessInfo.whatsappGreeting],
   );
 

@@ -2,13 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { useTranslation } from "@/lib/i18n";
-import { getWhatsAppUrl } from "@/lib/whatsapp";
-import { businessInfo } from "@/data/business-info";
+import { useBusinessInfo, useWhatsAppUrl } from "@/lib/business-info-context";
 import { ANIMATION } from "@/data/constants";
 import { WhatsAppIcon } from "@/components/icons";
 
 export default function WhatsAppButton() {
   const { language } = useTranslation();
+  const businessInfo = useBusinessInfo();
+  const waUrl = useWhatsAppUrl();
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -16,7 +17,7 @@ export default function WhatsAppButton() {
     return () => clearTimeout(timer);
   }, []);
 
-  const whatsappUrl = getWhatsAppUrl(
+  const whatsappUrl = waUrl(
     businessInfo.whatsappGreeting[language as keyof typeof businessInfo.whatsappGreeting],
   );
 

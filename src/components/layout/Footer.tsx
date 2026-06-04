@@ -1,8 +1,7 @@
 "use client";
 
 import { useTranslation } from "@/lib/i18n";
-import { businessInfo } from "@/data/business-info";
-import { getWhatsAppUrl } from "@/lib/whatsapp";
+import { useBusinessInfo, useWhatsAppUrl } from "@/lib/business-info-context";
 import {
   LANGUAGE_LABELS,
   NAV_LINKS,
@@ -11,8 +10,10 @@ import {
 
 export default function Footer() {
   const { t, language, setLanguage } = useTranslation();
+  const businessInfo = useBusinessInfo();
+  const waUrl = useWhatsAppUrl();
 
-  const whatsappUrl = getWhatsAppUrl(
+  const whatsappUrl = waUrl(
     businessInfo.whatsappGreeting[language as keyof typeof businessInfo.whatsappGreeting],
   );
 

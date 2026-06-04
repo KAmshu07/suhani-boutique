@@ -3,15 +3,17 @@
 import { useState } from "react";
 import { useTranslation } from "@/lib/i18n";
 import { useScrollReveal } from "@/lib/use-scroll-animation";
-import { getWhatsAppUrl, buildWhatsAppMessage } from "@/lib/whatsapp";
+import { buildWhatsAppMessage } from "@/lib/whatsapp";
 import { supabase } from "@/lib/supabase";
 import { SECTION_ID } from "@/data/constants";
-import { businessInfo } from "@/data/business-info";
+import { useBusinessInfo, useWhatsAppUrl } from "@/lib/business-info-context";
 import { MessageIcon, PhoneIcon, MapPinIcon, ClockIcon } from "@/components/icons";
 
 export default function Contact() {
   const { t, language } = useTranslation();
   const ref = useScrollReveal();
+  const businessInfo = useBusinessInfo();
+  const waUrl = useWhatsAppUrl();
 
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -31,7 +33,7 @@ export default function Contact() {
       .then(({ error }) => {
         if (error && process.env.NODE_ENV !== "production") console.warn("lead save failed", error);
       });
-    window.open(getWhatsAppUrl(text), "_blank", "noopener");
+    window.open(waUrl(text), "_blank", "noopener");
     setSent(true);
     setTimeout(() => setSent(false), 5000);
   }
@@ -59,7 +61,7 @@ export default function Contact() {
           <div className="flex flex-col gap-5">
             {/* WhatsApp */}
             <a
-              href={getWhatsAppUrl(businessInfo.whatsappGreeting[language])}
+              href={waUrl(businessInfo.whatsappGreeting[language])}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-start gap-3 group"

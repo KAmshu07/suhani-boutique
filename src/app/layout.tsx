@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Josefin_Sans, Poppins, Tiro_Devanagari_Hindi } from "next/font/google";
 import { LanguageProvider } from "@/lib/i18n";
+import { BusinessInfoProvider } from "@/lib/business-info-context";
 import JsonLd from "@/components/JsonLd";
 import "./globals.css";
 
@@ -59,7 +60,9 @@ export default function RootLayout({
       </head>
       <body className="min-h-full flex flex-col font-body text-brown bg-cream">
         <JsonLd />
-        <LanguageProvider>{children}</LanguageProvider>
+        <LanguageProvider>
+          <BusinessInfoProvider>{children}</BusinessInfoProvider>
+        </LanguageProvider>
       </body>
     </html>
   );

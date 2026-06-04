@@ -1,9 +1,12 @@
 import { businessInfo } from "@/data/business-info";
 import { EXTERNAL } from "@/data/constants";
 
-export function getWhatsAppUrl(message: string): string {
+export function getWhatsAppUrl(
+  message: string,
+  whatsappNumber: string = businessInfo.whatsappNumber,
+): string {
   const encoded = encodeURIComponent(message);
-  return `${EXTERNAL.WHATSAPP_BASE}/${businessInfo.whatsappNumber}?text=${encoded}`;
+  return `${EXTERNAL.WHATSAPP_BASE}/${whatsappNumber}?text=${encoded}`;
 }
 
 // Composes a WhatsApp message from a greeting and labeled form fields,
