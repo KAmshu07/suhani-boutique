@@ -5,6 +5,7 @@ import type { Session } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabase";
 import { businessInfo } from "@/data/business-info";
 import GalleryEditor from "@/components/admin/editors/GalleryEditor";
+import ServicesEditor from "@/components/admin/editors/ServicesEditor";
 
 // Admin shell. Two layers of protection: (1) the database RLS only lets the
 // 'admin' role read/write real data, and (2) this UI only shows the dashboard
@@ -205,6 +206,8 @@ function SectionView({ section }: { section: string }) {
   switch (section) {
     case "gallery":
       return <GalleryEditor />;
+    case "services":
+      return <ServicesEditor />;
     default:
       return <p className="text-sm text-brown-light">This editor is coming up next.</p>;
   }
