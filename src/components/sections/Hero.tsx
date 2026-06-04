@@ -3,9 +3,21 @@
 import Image from "next/image";
 import { useTranslation } from "@/lib/i18n";
 import { SECTION_ID } from "@/data/constants";
+import { getSettings } from "@/lib/content";
+import { useLiveContent } from "@/lib/use-content";
+
+const HERO_DEFAULT = {
+  image_url: "https://images.unsplash.com/photo-1617019114583-affb34d1b3cd?w=1920&q=80",
+};
+
+async function fetchHero(): Promise<{ image_url: string }> {
+  const s = await getSettings();
+  return (s.hero as { image_url: string }) ?? HERO_DEFAULT;
+}
 
 export default function Hero() {
   const { t } = useTranslation();
+  const { data: hero } = useLiveContent(fetchHero, HERO_DEFAULT);
 
   function scrollTo(id: string) {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
@@ -18,7 +30,7 @@ export default function Hero() {
     >
       {/* Full-viewport background image */}
       <Image
-        src="https://images.unsplash.com/photo-1617019114583-affb34d1b3cd?w=1920&q=80"
+        src={hero.image_url}
         alt=""
         fill
         priority
