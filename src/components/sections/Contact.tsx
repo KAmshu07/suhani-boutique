@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useTranslation } from "@/lib/i18n";
 import { useScrollReveal } from "@/lib/use-scroll-animation";
 import { getWhatsAppUrl, buildWhatsAppMessage } from "@/lib/whatsapp";
+import { supabase } from "@/lib/supabase";
 import { SECTION_ID } from "@/data/constants";
 import { businessInfo } from "@/data/business-info";
 import { MessageIcon, PhoneIcon, MapPinIcon, ClockIcon } from "@/components/icons";
@@ -24,6 +25,12 @@ export default function Contact() {
       { label: t("booking.whatsappLabel.phone"), value: phone },
       { label: t("booking.whatsappLabel.notes"), value: message },
     ]);
+    supabase
+      .from("booking_requests")
+      .insert({ name, phone, message: message || null })
+      .then(({ error }) => {
+        if (error && process.env.NODE_ENV !== "production") console.warn("lead save failed", error);
+      });
     window.open(getWhatsAppUrl(text), "_blank", "noopener");
     setSent(true);
     setTimeout(() => setSent(false), 5000);

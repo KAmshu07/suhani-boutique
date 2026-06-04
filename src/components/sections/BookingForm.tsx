@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useTranslation } from "@/lib/i18n";
 import { useScrollReveal } from "@/lib/use-scroll-animation";
 import { getWhatsAppUrl, buildWhatsAppMessage } from "@/lib/whatsapp";
+import { supabase } from "@/lib/supabase";
 import { SECTION_ID } from "@/data/constants";
 import { services } from "@/data/services";
 import { businessInfo } from "@/data/business-info";
@@ -38,6 +39,18 @@ export default function BookingForm() {
       { label: t("booking.whatsappLabel.date"), value: date },
       { label: t("booking.whatsappLabel.notes"), value: message },
     ]);
+    supabase
+      .from("booking_requests")
+      .insert({
+        name,
+        phone,
+        service_slug: service || null,
+        requested_date: date || null,
+        message: message || null,
+      })
+      .then(({ error }) => {
+        if (error && process.env.NODE_ENV !== "production") console.warn("lead save failed", error);
+      });
     window.open(getWhatsAppUrl(text), "_blank", "noopener");
     setSuccess(true);
     setTimeout(() => setSuccess(false), 5000);
