@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { listAll } from "@/lib/admin/content-admin";
+import { listAll, getSettingValue } from "@/lib/admin/content-admin";
 
 function msg(e: unknown) {
   return e instanceof Error ? e.message : String(e);
@@ -40,4 +40,28 @@ export function useAdminRows<T>(table: string) {
   }, [table]);
 
   return { rows, setRows, status, setStatus, reload };
+}
+
+// Loads a single settings singleton (e.g. announcement, hero, about, business_info).
+export function useAdminSetting<T>(key: string, fallback: T) {
+  const [value, setValue] = useState<T>(fallback);
+  const [status, setStatus] = useState("Loading…");
+
+  useEffect(() => {
+    let alive = true;
+    getSettingValue(key)
+      .then((v) => {
+        if (!alive) return;
+        if (v != null) setValue(v as T);
+        setStatus("");
+      })
+      .catch((e) => {
+        if (alive) setStatus("Failed to load: " + msg(e));
+      });
+    return () => {
+      alive = false;
+    };
+  }, [key]);
+
+  return { value, setValue, status, setStatus };
 }

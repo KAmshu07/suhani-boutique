@@ -1,4 +1,5 @@
 import Navbar from "@/components/layout/Navbar";
+import AnnouncementBanner from "@/components/layout/AnnouncementBanner";
 import Hero from "@/components/sections/Hero";
 import Services from "@/components/sections/Services";
 import Gallery from "@/components/sections/Gallery";
@@ -14,6 +15,7 @@ import BackToTop from "@/components/layout/BackToTop";
 export default function Home() {
   return (
     <>
+      <AnnouncementBanner />
       <Navbar />
       <main>
         <Hero />
