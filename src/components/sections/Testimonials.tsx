@@ -4,27 +4,40 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "@/lib/i18n";
 import { useScrollReveal } from "@/lib/use-scroll-animation";
 import { SECTION_ID, ANIMATION } from "@/data/constants";
-import { testimonials } from "@/data/testimonials";
+import { getTestimonials } from "@/lib/content";
+import { useLiveContent } from "@/lib/use-content";
+import { getLocalizedField, type Localized } from "@/lib/localized";
+
+type Testimonial = {
+  id: string;
+  customer_name: string;
+  service: string;
+  quote: Partial<Localized>;
+  rating: number;
+};
+
+const TESTIMONIAL_FALLBACK: Testimonial[] = [];
 
 export default function Testimonials() {
   const { t, language } = useTranslation();
   const ref = useScrollReveal();
+  const { data: items } = useLiveContent(getTestimonials, TESTIMONIAL_FALLBACK);
   const [activeIndex, setActiveIndex] = useState(0);
   const [fade, setFade] = useState(true);
   const [paused, setPaused] = useState(false);
 
-  // Auto-rotate testimonials
+  // Auto-rotate (re-arms when reviews load from the DB).
   useEffect(() => {
-    if (paused || testimonials.length === 0) return;
+    if (paused || items.length === 0) return;
     const interval = setInterval(() => {
       setFade(false);
       setTimeout(() => {
-        setActiveIndex((prev) => (prev + 1) % testimonials.length);
+        setActiveIndex((prev) => (prev + 1) % items.length);
         setFade(true);
       }, ANIMATION.TESTIMONIAL_FADE);
     }, ANIMATION.TESTIMONIAL_INTERVAL);
     return () => clearInterval(interval);
-  }, [paused]);
+  }, [paused, items.length]);
 
   function goTo(index: number) {
     if (index === activeIndex) return;
@@ -36,16 +49,14 @@ export default function Testimonials() {
     }, ANIMATION.TESTIMONIAL_FADE);
   }
 
-  if (testimonials.length === 0) return null;
+  if (items.length === 0) return null;
 
-  const current = testimonials[activeIndex];
+  const list = items as Testimonial[];
+  const current = list[activeIndex] ?? list[0];
 
   return (
     <section id={SECTION_ID.TESTIMONIALS} className="bg-cream py-20 md:py-28 px-6">
-      <div
-        ref={ref}
-        className="scroll-reveal max-w-6xl mx-auto"
-      >
+      <div ref={ref} className="scroll-reveal max-w-6xl mx-auto">
         {/* Heading */}
         <div className="text-center">
           <h2 className="font-heading text-3xl font-semibold uppercase tracking-widest text-brown">
@@ -56,31 +67,20 @@ export default function Testimonials() {
 
         {/* Testimonial display */}
         <div className="max-w-3xl mx-auto text-center py-12">
-          <div
-            className="transition-opacity duration-300"
-            style={{ opacity: fade ? 1 : 0 }}
-          >
-            {/* Decorative quote mark */}
-            <div className="font-heading text-6xl text-gold/30 leading-none select-none">
-              &ldquo;
-            </div>
+          <div className="transition-opacity duration-300" style={{ opacity: fade ? 1 : 0 }}>
+            <div className="font-heading text-6xl text-gold/30 leading-none select-none">&ldquo;</div>
 
             <p className="text-lg md:text-xl text-brown leading-relaxed italic">
-              {current.quote[language]}
+              {getLocalizedField(current.quote, language)}
             </p>
 
             <div className="font-heading text-sm uppercase tracking-widest text-brown mt-6 font-semibold">
-              {current.name[language]}
+              {current.customer_name}
             </div>
-            <div className="text-sm text-brown-light mt-1">
-              {current.service[language]}
-            </div>
+            <div className="text-sm text-brown-light mt-1">{current.service}</div>
 
             {/* Star rating */}
-            <div
-              className="text-gold text-sm mt-3"
-              aria-label={`${current.rating} ${t("a11y.starRating")}`}
-            >
+            <div className="text-gold text-sm mt-3" aria-label={`${current.rating} ${t("a11y.starRating")}`}>
               {Array.from({ length: current.rating }, (_, i) => (
                 <span key={i}>&#9733;</span>
               ))}
@@ -90,9 +90,9 @@ export default function Testimonials() {
 
         {/* Navigation dots */}
         <div className="flex justify-center gap-3 mt-8">
-          {testimonials.map((_, index) => (
+          {list.map((item, index) => (
             <button
-              key={index}
+              key={item.id}
               onClick={() => goTo(index)}
               aria-label={`Testimonial ${index + 1}`}
               className="p-3"
