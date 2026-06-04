@@ -30,6 +30,8 @@ jobs:
         env:
           NEXT_PUBLIC_BASE_PATH: /suhani-boutique
           NEXT_PUBLIC_SITE_URL: https://kamshu07.github.io/suhani-boutique
+          NEXT_PUBLIC_SUPABASE_URL: https://riyviuoixhazwekcptzq.supabase.co
+          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: sb_publishable_0lh-xvr-uZlhmW120SnEXg_ZitHnzSh
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
