@@ -5,25 +5,54 @@ import type { Session } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabase";
 import { businessInfo } from "@/data/business-info";
 
-// Admin shell: client-gated login + dashboard. Security is enforced by RLS in
-// the database, not by hiding this route. The CMS and Order Book tabs are filled
-// in by later phases. (Admin UI is English-only for now; localization is a later
-// concern once the admin surfaces are fleshed out.)
+// Admin shell. Two layers of protection: (1) the database RLS only lets the
+// 'admin' role read/write real data, and (2) this UI only shows the dashboard
+// when the logged-in user's profile role is 'admin'. A logged-in non-admin sees
+// "not authorized", never the dashboard. (Admin UI is English-only for now.)
 export default function AdminApp() {
   const [session, setSession] = useState<Session | null>(null);
+  const [role, setRole] = useState<string | null>(null);
   const [checked, setChecked] = useState(false);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      setSession(data.session);
+    let alive = true;
+
+    async function load(next: Session | null) {
+      if (!next) {
+        if (alive) {
+          setSession(null);
+          setRole(null);
+          setChecked(true);
+        }
+        return;
+      }
+      // Read our own profile role (RLS allows reading your own row).
+      const { data } = await supabase
+        .from("profiles")
+        .select("role")
+        .eq("id", next.user.id)
+        .maybeSingle();
+      if (!alive) return;
+      setSession(next);
+      setRole((data?.role as string) ?? null);
       setChecked(true);
+    }
+
+    supabase.auth.getSession().then(({ data }) => load(data.session));
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, next) => {
+      setChecked(false);
+      load(next);
     });
-    const { data: sub } = supabase.auth.onAuthStateChange((_event, next) => setSession(next));
-    return () => sub.subscription.unsubscribe();
+    return () => {
+      alive = false;
+      sub.subscription.unsubscribe();
+    };
   }, []);
 
   if (!checked) return <Centered>Loading…</Centered>;
-  return session ? <Dashboard email={session.user.email ?? ""} /> : <Login />;
+  if (!session) return <Login />;
+  if (role !== "admin") return <NotAuthorized email={session.user.email ?? ""} />;
+  return <Dashboard email={session.user.email ?? ""} />;
 }
 
 function Centered({ children }: { children: React.ReactNode }) {
@@ -98,6 +127,25 @@ function Login() {
           {busy ? "Signing in…" : "Sign In"}
         </button>
       </form>
+    </Centered>
+  );
+}
+
+function NotAuthorized({ email }: { email: string }) {
+  return (
+    <Centered>
+      <div className="text-center max-w-sm">
+        <h1 className="font-heading text-xl font-semibold uppercase tracking-widest">Not authorized</h1>
+        <p className="text-sm text-brown-light mt-3">
+          The account {email} does not have admin access.
+        </p>
+        <button
+          onClick={() => supabase.auth.signOut()}
+          className="mt-6 text-sm font-heading uppercase tracking-wider text-gold hover:text-brown transition-colors"
+        >
+          Log out
+        </button>
+      </div>
     </Centered>
   );
 }
