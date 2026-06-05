@@ -5,6 +5,10 @@ import { GALLERY_CATEGORY } from "@/data/constants";
 import { upsertRow, deleteRow } from "@/lib/admin/content-admin";
 import { useAdminRows } from "@/lib/admin/use-admin-rows";
 import ImageUpload from "@/components/admin/ImageUpload";
+import SaveButton from "@/components/admin/SaveButton";
+import EmptyState from "@/components/admin/EmptyState";
+import { useConfirm } from "@/components/admin/ConfirmDialog";
+import { TrashIcon } from "@/components/icons";
 
 type Row = {
   id: string;
@@ -28,24 +32,21 @@ function errMsg(e: unknown) {
 }
 
 export default function GalleryEditor() {
+  const confirm = useConfirm();
   const { rows, setRows, status, setStatus, reload } = useAdminRows<Row>("gallery_images");
 
   function patch(id: string, p: Partial<Row>) {
     setRows((rs) => rs.map((r) => (r.id === id ? { ...r, ...p } : r)));
   }
 
-  async function save(row: Row) {
-    setStatus("Saving…");
-    try {
-      await upsertRow("gallery_images", { ...row });
-      setStatus("Saved ✓");
-    } catch (e) {
-      setStatus("Save failed: " + errMsg(e));
-    }
+  // Throws on failure so the SaveButton shows its error state.
+  function save(row: Row) {
+    return upsertRow("gallery_images", { ...row });
   }
 
   async function remove(id: string) {
-    if (!window.confirm("Delete this image?")) return;
+    const ok = await confirm({ title: "Delete this image?", danger: true, confirmLabel: "Delete" });
+    if (!ok) return;
     try {
       await deleteRow("gallery_images", id);
       await reload();
@@ -73,33 +74,29 @@ export default function GalleryEditor() {
   }
 
   const field =
-    "bg-cream-alt border border-brown-light/20 px-2 py-1.5 text-brown text-sm focus:border-gold focus:outline-none";
+    "bg-cream-alt border border-brown-light/20 px-3 py-2 text-base text-brown focus:border-gold focus:outline-none rounded";
 
   return (
     <div>
       <div className="flex items-center justify-between">
         <h2 className="font-heading text-lg font-semibold uppercase tracking-wider">Gallery</h2>
-        {status && <span className="text-xs text-brown-light">{status}</span>}
+        {status && <span className={`text-base ${/fail/i.test(status) ? "text-red-600" : "text-green-700"}`}>{status}</span>}
       </div>
 
       <div className="mt-4 border border-dashed border-brown-light/25 p-4">
-        <p className="text-xs font-heading uppercase tracking-wider text-brown-light mb-2">Add a photo</p>
+        <p className="mb-2 text-sm font-heading uppercase tracking-wider text-brown-light">Add a photo</p>
         <ImageUpload folder="gallery" onUploaded={addImage} />
       </div>
 
       <div className="mt-6 flex flex-col gap-4">
         {rows.map((row) => (
           <div key={row.id} className="flex gap-3 border border-brown-light/15 p-3">
-            <div className="relative w-20 h-24 shrink-0 overflow-hidden bg-cream-alt">
+            <div className="relative h-24 w-20 shrink-0 overflow-hidden bg-cream-alt">
               <Image src={row.url} alt={row.alt} fill className="object-cover" sizes="80px" />
             </div>
-            <div className="flex-1 flex flex-col gap-2">
+            <div className="flex flex-1 flex-col gap-2">
               <div className="flex flex-wrap items-center gap-2">
-                <select
-                  value={row.category}
-                  onChange={(e) => patch(row.id, { category: e.target.value })}
-                  className={field}
-                >
+                <select value={row.category} onChange={(e) => patch(row.id, { category: e.target.value })} className={field}>
                   {CATEGORIES.map((c) => (
                     <option key={c} value={c}>
                       {c}
@@ -113,12 +110,8 @@ export default function GalleryEditor() {
                   title="Display order"
                   className={`${field} w-16`}
                 />
-                <label className="flex items-center gap-1 text-xs text-brown-light">
-                  <input
-                    type="checkbox"
-                    checked={row.is_visible}
-                    onChange={(e) => patch(row.id, { is_visible: e.target.checked })}
-                  />
+                <label className="flex items-center gap-1 text-sm text-brown-light">
+                  <input type="checkbox" className="h-5 w-5" checked={row.is_visible} onChange={(e) => patch(row.id, { is_visible: e.target.checked })} />
                   Visible
                 </label>
               </div>
@@ -129,26 +122,21 @@ export default function GalleryEditor() {
                 placeholder="Description (alt text)"
                 className={field}
               />
-              <div className="flex gap-4">
-                <button
-                  onClick={() => save(row)}
-                  className="bg-gold text-cream px-4 py-1.5 text-xs font-heading uppercase tracking-wider hover:bg-brown transition-colors"
-                >
+              <div className="flex items-center gap-4">
+                <SaveButton variant="secondary" onSave={() => save(row)}>
                   Save
-                </button>
+                </SaveButton>
                 <button
                   onClick={() => remove(row.id)}
-                  className="text-xs font-heading uppercase tracking-wider text-red-600 hover:underline"
+                  className="flex min-h-[44px] items-center gap-1 text-base font-medium text-red-600 hover:underline"
                 >
-                  Delete
+                  <TrashIcon className="h-5 w-5" /> Delete
                 </button>
               </div>
             </div>
           </div>
         ))}
-        {rows.length === 0 && status === "" && (
-          <p className="text-sm text-brown-light">No photos yet — add one above.</p>
-        )}
+        {rows.length === 0 && status === "" && <EmptyState message="No photos yet — add one above." />}
       </div>
     </div>
   );

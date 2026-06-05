@@ -2,7 +2,12 @@
 
 import { upsertRow, deleteRow } from "@/lib/admin/content-admin";
 import { useAdminRows } from "@/lib/admin/use-admin-rows";
+import { ADMIN_BTN } from "@/data/constants";
 import LocalizedInput from "@/components/admin/LocalizedInput";
+import SaveButton from "@/components/admin/SaveButton";
+import EmptyState from "@/components/admin/EmptyState";
+import { useConfirm } from "@/components/admin/ConfirmDialog";
+import { TrashIcon } from "@/components/icons";
 import type { Localized } from "@/lib/localized";
 
 type Row = {
@@ -23,24 +28,21 @@ function errMsg(e: unknown) {
 }
 
 export default function ServicesEditor() {
+  const confirm = useConfirm();
   const { rows, setRows, status, setStatus, reload } = useAdminRows<Row>("services");
 
   function patch(id: string, p: Partial<Row>) {
     setRows((rs) => rs.map((r) => (r.id === id ? { ...r, ...p } : r)));
   }
 
-  async function save(row: Row) {
-    setStatus("Saving…");
-    try {
-      await upsertRow("services", { ...row, description: row.description ?? {} });
-      setStatus("Saved ✓");
-    } catch (e) {
-      setStatus("Save failed: " + errMsg(e));
-    }
+  // Throws on failure so the SaveButton shows its error state.
+  function save(row: Row) {
+    return upsertRow("services", { ...row, description: row.description ?? {} });
   }
 
   async function remove(id: string) {
-    if (!window.confirm("Delete this service?")) return;
+    const ok = await confirm({ title: "Delete this service?", danger: true, confirmLabel: "Delete" });
+    if (!ok) return;
     try {
       await deleteRow("services", id);
       await reload();
@@ -70,24 +72,21 @@ export default function ServicesEditor() {
   }
 
   const field =
-    "bg-cream-alt border border-brown-light/20 px-2 py-1.5 text-brown text-sm focus:border-gold focus:outline-none";
+    "bg-cream-alt border border-brown-light/20 px-3 py-2 text-base text-brown focus:border-gold focus:outline-none rounded";
 
   return (
     <div>
       <div className="flex items-center justify-between">
         <h2 className="font-heading text-lg font-semibold uppercase tracking-wider">Services</h2>
-        {status && <span className="text-xs text-brown-light">{status}</span>}
+        {status && <span className={`text-base ${/fail/i.test(status) ? "text-red-600" : "text-green-700"}`}>{status}</span>}
       </div>
-      <button
-        onClick={add}
-        className="mt-3 bg-gold text-cream px-4 py-1.5 text-xs font-heading uppercase tracking-wider hover:bg-brown transition-colors"
-      >
+      <button onClick={add} className={`mt-3 ${ADMIN_BTN.PRIMARY}`}>
         + Add service
       </button>
 
       <div className="mt-6 flex flex-col gap-6">
         {rows.map((row) => (
-          <div key={row.id} className="border border-brown-light/15 p-4 flex flex-col gap-3">
+          <div key={row.id} className="flex flex-col gap-3 border border-brown-light/15 p-4">
             <LocalizedInput label="Name" value={row.name ?? {}} onChange={(v) => patch(row.id, { name: v })} />
             <LocalizedInput
               label="Description"
@@ -95,7 +94,7 @@ export default function ServicesEditor() {
               value={row.description ?? {}}
               onChange={(v) => patch(row.id, { description: v })}
             />
-            <div className="flex flex-wrap items-center gap-3 text-xs text-brown-light">
+            <div className="flex flex-wrap items-center gap-3 text-sm text-brown-light">
               <label>
                 Price{" "}
                 <input
@@ -108,11 +107,7 @@ export default function ServicesEditor() {
               </label>
               <label>
                 Icon{" "}
-                <select
-                  value={row.icon ?? ""}
-                  onChange={(e) => patch(row.id, { icon: e.target.value })}
-                  className={`${field} ml-1`}
-                >
+                <select value={row.icon ?? ""} onChange={(e) => patch(row.id, { icon: e.target.value })} className={`${field} ml-1`}>
                   {ICONS.map((i) => (
                     <option key={i} value={i}>
                       {i}
@@ -130,30 +125,24 @@ export default function ServicesEditor() {
                 />
               </label>
               <label className="flex items-center gap-1">
-                <input
-                  type="checkbox"
-                  checked={row.is_visible}
-                  onChange={(e) => patch(row.id, { is_visible: e.target.checked })}
-                />
+                <input type="checkbox" className="h-5 w-5" checked={row.is_visible} onChange={(e) => patch(row.id, { is_visible: e.target.checked })} />
                 Visible
               </label>
             </div>
-            <div className="flex gap-4">
-              <button
-                onClick={() => save(row)}
-                className="bg-gold text-cream px-4 py-1.5 text-xs font-heading uppercase tracking-wider hover:bg-brown transition-colors"
-              >
+            <div className="flex items-center gap-4">
+              <SaveButton variant="secondary" onSave={() => save(row)}>
                 Save
-              </button>
+              </SaveButton>
               <button
                 onClick={() => remove(row.id)}
-                className="text-xs font-heading uppercase tracking-wider text-red-600 hover:underline"
+                className="flex min-h-[44px] items-center gap-1 text-base font-medium text-red-600 hover:underline"
               >
-                Delete
+                <TrashIcon className="h-5 w-5" /> Delete
               </button>
             </div>
           </div>
         ))}
+        {rows.length === 0 && status === "" && <EmptyState message="No services yet — tap “Add service”." />}
       </div>
     </div>
   );

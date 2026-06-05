@@ -15,6 +15,7 @@ import OrdersEditor from "@/components/admin/editors/OrdersEditor";
 import CustomersEditor from "@/components/admin/editors/CustomersEditor";
 import LeadsEditor from "@/components/admin/editors/LeadsEditor";
 import { ConfirmProvider } from "@/components/admin/ConfirmDialog";
+import { ADMIN_BTN } from "@/data/constants";
 
 // Admin shell. Two layers of protection: (1) the database RLS only lets the
 // 'admin' role read/write real data, and (2) this UI only shows the dashboard
@@ -130,11 +131,7 @@ function Login() {
           />
         </div>
         {error && <p className="text-sm text-red-600">{error}</p>}
-        <button
-          type="submit"
-          disabled={busy}
-          className="bg-gold text-cream px-8 py-3 font-heading uppercase tracking-wider text-sm hover:bg-brown transition-colors disabled:opacity-50"
-        >
+        <button type="submit" disabled={busy} className={`${ADMIN_BTN.PRIMARY} w-full`}>
           {busy ? "Signing in…" : "Sign In"}
         </button>
       </form>
