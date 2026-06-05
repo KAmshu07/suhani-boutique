@@ -4,10 +4,13 @@ import Image from "next/image";
 import { GALLERY_CATEGORY, ADMIN_FIELD } from "@/data/constants";
 import { upsertRow, deleteRow } from "@/lib/admin/content-admin";
 import { useAdminRows } from "@/lib/admin/use-admin-rows";
+import { useReorder } from "@/lib/admin/use-reorder";
 import { isErrorNotice, friendlyError } from "@/lib/admin/notice";
 import ImageUpload from "@/components/admin/ImageUpload";
 import SaveButton from "@/components/admin/SaveButton";
 import EmptyState from "@/components/admin/EmptyState";
+import Toggle from "@/components/admin/Toggle";
+import ReorderControls from "@/components/admin/ReorderControls";
 import { useConfirm } from "@/components/admin/ConfirmDialog";
 import { TrashIcon } from "@/components/icons";
 
@@ -28,9 +31,12 @@ const CATEGORIES = [
   GALLERY_CATEGORY.FABRIC,
 ];
 
+const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+
 export default function GalleryEditor() {
   const confirm = useConfirm();
   const { rows, setRows, status, setStatus, reload } = useAdminRows<Row>("gallery_images");
+  const reorder = useReorder<Row>("gallery_images", rows, setRows, setStatus);
 
   function patch(id: string, p: Partial<Row>) {
     setRows((rs) => rs.map((r) => (r.id === id ? { ...r, ...p } : r)));
@@ -41,11 +47,11 @@ export default function GalleryEditor() {
     return upsertRow("gallery_images", { ...row });
   }
 
-  async function remove(id: string) {
-    const ok = await confirm({ title: "Delete this image?", danger: true, confirmLabel: "Delete" });
+  async function remove(row: Row) {
+    const ok = await confirm({ title: "Delete this photo?", danger: true, confirmLabel: "Delete" });
     if (!ok) return;
     try {
-      await deleteRow("gallery_images", id);
+      await deleteRow("gallery_images", row.id);
       await reload();
     } catch (e) {
       setStatus(friendlyError(e, "delete"));
@@ -64,13 +70,11 @@ export default function GalleryEditor() {
         is_visible: true,
       });
       await reload();
-      setStatus("Added ✓");
+      setStatus("Photo added ✓");
     } catch (e) {
       setStatus(friendlyError(e, "add"));
     }
   }
-
-  const field = ADMIN_FIELD;
 
   return (
     <div>
@@ -78,52 +82,55 @@ export default function GalleryEditor() {
         <h2 className="font-heading text-lg font-semibold uppercase tracking-wider">Gallery</h2>
         {status && <span className={`text-base ${isErrorNotice(status) ? "text-red-600" : "text-green-700"}`}>{status}</span>}
       </div>
+      <p className="mt-2 text-base text-brown-light">
+        The photos shown in the gallery on your website. Use the arrows (or drag on a computer) to change the order — the first one shows first.
+      </p>
 
-      <div className="mt-4 border border-dashed border-brown-light/25 p-4">
-        <p className="mb-2 text-sm font-heading uppercase tracking-wider text-brown-light">Add a photo</p>
+      <div className="mt-4 rounded-lg border border-dashed border-brown-light/25 p-4">
+        <p className="mb-3 text-base font-medium text-brown">Add a photo</p>
         <ImageUpload folder="gallery" onUploaded={addImage} />
       </div>
 
       <div className="mt-6 flex flex-col gap-4">
-        {rows.map((row) => (
-          <div key={row.id} className="flex gap-3 border border-brown-light/15 p-3">
-            <div className="relative h-24 w-20 shrink-0 overflow-hidden bg-cream-alt">
+        {rows.map((row, i) => (
+          <div
+            key={row.id}
+            {...reorder.rowDropProps(i)}
+            className={`flex gap-3 rounded-lg border p-3 transition-colors ${
+              reorder.overIndex === i ? "border-gold bg-gold/5" : "border-brown-light/15"
+            } ${reorder.dragIndex === i ? "opacity-50" : ""}`}
+          >
+            <ReorderControls index={i} total={rows.length} onMove={reorder.move} dragHandleProps={reorder.dragHandleProps(i)} />
+            <div className="relative h-24 w-20 shrink-0 overflow-hidden rounded bg-cream-alt">
               <Image src={row.url} alt={row.alt} fill className="object-cover" sizes="80px" />
             </div>
             <div className="flex flex-1 flex-col gap-2">
-              <div className="flex flex-wrap items-center gap-2">
-                <select value={row.category} onChange={(e) => patch(row.id, { category: e.target.value })} className={field}>
-                  {CATEGORIES.map((c) => (
-                    <option key={c} value={c}>
-                      {c}
-                    </option>
-                  ))}
-                </select>
-                <input
-                  type="number"
-                  value={row.display_order}
-                  onChange={(e) => patch(row.id, { display_order: Number(e.target.value) })}
-                  title="Display order"
-                  className={`${field} w-16`}
-                />
-                <label className="flex items-center gap-1 text-sm text-brown-light">
-                  <input type="checkbox" className="h-5 w-5" checked={row.is_visible} onChange={(e) => patch(row.id, { is_visible: e.target.checked })} />
-                  Visible
+              <div className="flex flex-wrap items-center gap-4">
+                <label className="text-sm text-brown-light">
+                  Category{" "}
+                  <select value={row.category} onChange={(e) => patch(row.id, { category: e.target.value })} className={`${ADMIN_FIELD} ml-1`}>
+                    {CATEGORIES.map((c) => (
+                      <option key={c} value={c}>
+                        {cap(c)}
+                      </option>
+                    ))}
+                  </select>
                 </label>
+                <Toggle checked={row.is_visible} onChange={(v) => patch(row.id, { is_visible: v })} label="Show on website" />
               </div>
               <input
                 type="text"
                 value={row.alt ?? ""}
                 onChange={(e) => patch(row.id, { alt: e.target.value })}
-                placeholder="Description (alt text)"
-                className={field}
+                placeholder="Short description (helps people who can't see the image)"
+                className={`${ADMIN_FIELD} w-full`}
               />
               <div className="flex items-center gap-4">
                 <SaveButton variant="secondary" onSave={() => save(row)}>
                   Save
                 </SaveButton>
                 <button
-                  onClick={() => remove(row.id)}
+                  onClick={() => remove(row)}
                   className="flex min-h-[44px] items-center gap-1 text-base font-medium text-red-600 hover:underline"
                 >
                   <TrashIcon className="h-5 w-5" /> Delete
