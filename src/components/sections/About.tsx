@@ -26,36 +26,44 @@ export default function About() {
   ];
 
   return (
-    <section id={SECTION_ID.ABOUT} className="bg-cream-alt py-20 md:py-28 px-6">
+    <section id={SECTION_ID.ABOUT} className="bg-cream-alt px-6 py-20 md:py-28">
       <div
         ref={ref}
-        className="scroll-reveal grid grid-cols-1 md:grid-cols-2 gap-12 max-w-6xl mx-auto items-center"
+        className="scroll-reveal mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 md:grid-cols-2 md:gap-16"
       >
-        {/* Left column: about image */}
-        <div className="aspect-[3/4] relative overflow-hidden border-l-4 border-gold">
-          <Image
-            src={about.image_url}
-            alt="Suhani Boutique workspace"
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, 50vw"
+        {/* Image with an offset gold frame for editorial depth */}
+        <div className="stagger-child relative">
+          <div
+            aria-hidden="true"
+            className="absolute -bottom-4 -right-4 hidden h-full w-full border border-gold/60 md:block"
           />
+          <div className="relative aspect-[3/4] overflow-hidden">
+            <Image
+              src={about.image_url}
+              alt="Suhani Boutique workspace"
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 50vw"
+            />
+          </div>
         </div>
 
-        {/* Right column: text content */}
-        <div>
+        {/* Text content */}
+        <div className="stagger-child">
           <h2 className="font-heading text-3xl font-semibold uppercase tracking-widest text-brown">
             {getLocalizedField(about.heading, language)}
           </h2>
-          <div className="w-16 h-px bg-gold mt-4 mb-8" />
-          <p className="text-brown-light leading-relaxed">{getLocalizedField(about.story, language)}</p>
+          <div className="mt-4 mb-8 h-px w-16 bg-gold" />
+          <p className="leading-relaxed text-brown-light md:text-lg">
+            {getLocalizedField(about.story, language)}
+          </p>
 
           {/* Stats */}
-          <div className="mt-10 flex gap-8 md:gap-12">
-            {stats.map((stat) => (
-              <div key={stat.label}>
-                <div className="font-heading text-3xl font-bold text-gold">{stat.value}</div>
-                <div className="text-sm text-brown-light mt-1">{stat.label}</div>
+          <div className="mt-10 flex border-t border-brown-light/15 pt-8">
+            {stats.map((stat, i) => (
+              <div key={stat.label} className={`flex-1 ${i > 0 ? "border-l border-brown-light/15 pl-5 md:pl-6" : ""}`}>
+                <div className="font-heading text-3xl font-bold text-gold md:text-4xl">{stat.value}</div>
+                <div className="mt-1 text-sm text-brown-light">{stat.label}</div>
               </div>
             ))}
           </div>
