@@ -42,3 +42,6 @@ next-env.d.ts
 
 # claude code — personal/local settings (not shared)
 .claude/settings.local.json
+
+# playwright mcp scratch output
+.playwright-mcp/
