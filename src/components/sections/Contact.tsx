@@ -186,13 +186,13 @@ export default function Contact() {
 
               <button
                 type="submit"
-                className="w-full bg-gold text-cream px-8 py-3 font-heading uppercase tracking-wider text-sm hover:bg-brown transition-colors"
+                className="w-full bg-gold px-8 py-3 font-heading text-sm font-semibold uppercase tracking-wider text-brown transition-colors hover:bg-brown hover:text-cream"
               >
                 {t("booking.submit")}
               </button>
 
               {sent && (
-                <div className="bg-gold/10 text-gold p-4 text-center text-sm">
+                <div className="bg-green-50 p-4 text-center text-sm font-medium text-green-700">
                   {t("contact.messageSent")}
                 </div>
               )}

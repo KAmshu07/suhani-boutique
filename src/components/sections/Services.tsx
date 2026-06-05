@@ -115,22 +115,24 @@ export default function Services() {
             return (
               <div
                 key={service.slug}
-                className="stagger-child bg-cream rounded-none p-8 hover:shadow-lg transition-shadow"
+                className="stagger-child group relative overflow-hidden border border-brown-light/10 bg-cream p-8 transition-all duration-300 hover:-translate-y-1 hover:border-gold/40 hover:shadow-xl"
               >
+                <span className="pointer-events-none absolute inset-x-0 top-0 h-0.5 origin-left scale-x-0 bg-gold transition-transform duration-300 group-hover:scale-x-100" />
                 <ServiceIcon name={service.icon ?? ""} />
-                <h3 className="font-heading text-lg font-semibold uppercase tracking-wider text-brown mt-4">
+                <h3 className="mt-4 font-heading text-lg font-semibold uppercase tracking-wider text-brown">
                   {serviceName}
                 </h3>
-                <p className="text-sm text-brown-light mt-2">
+                <p className="mt-2 text-sm text-brown-light">
                   {service.price ? `\u20B9${service.price}` : ""}
                 </p>
                 <a
                   href={whatsappUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-block mt-4 text-gold font-heading uppercase tracking-wider text-sm hover:text-brown transition-colors"
+                  className="group/link mt-4 inline-flex items-center gap-1 font-heading text-sm uppercase tracking-wider text-gold transition-colors hover:text-brown"
                 >
                   {t("services.enquire")}
+                  <span className="transition-transform duration-300 group-hover/link:translate-x-1">\u2192</span>
                 </a>
               </div>
             );

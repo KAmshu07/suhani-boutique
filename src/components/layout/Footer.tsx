@@ -23,7 +23,7 @@ export default function Footer() {
   }
 
   return (
-    <footer className="bg-brown text-cream pb-20 md:pb-0">
+    <footer className="border-t-2 border-gold/30 bg-brown text-cream pb-20 md:pb-0">
       {/* Main footer content */}
       <div className="mx-auto max-w-7xl px-6 py-16">
         <div className="grid gap-12 md:grid-cols-3">
@@ -115,7 +115,7 @@ export default function Footer() {
                 onClick={() => setLanguage(lang)}
                 className={`rounded-full px-3 py-1 font-heading text-xs uppercase tracking-wider transition-all duration-300 ${
                   language === lang
-                    ? "bg-gold text-cream"
+                    ? "bg-gold text-brown"
                     : "text-cream/50 hover:text-gold"
                 }`}
               >

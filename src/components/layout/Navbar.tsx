@@ -182,7 +182,7 @@ function LanguageSwitcher({
           onClick={() => setLanguage(lang)}
           className={`rounded-full px-3 py-1 font-heading text-xs uppercase tracking-wider transition-all duration-300 ${
             language === lang
-              ? "bg-gold text-cream"
+              ? "bg-gold text-brown"
               : "hover:text-gold"
           }`}
         >

@@ -66,21 +66,26 @@ export default function Testimonials() {
         </div>
 
         {/* Testimonial display */}
-        <div className="max-w-3xl mx-auto text-center py-12">
-          <div className="transition-opacity duration-300" style={{ opacity: fade ? 1 : 0 }}>
-            <div className="font-heading text-6xl text-gold/30 leading-none select-none">&ldquo;</div>
+        <div className="mx-auto mt-12 max-w-3xl">
+          <div
+            className="relative overflow-hidden rounded-lg border border-brown-light/10 bg-cream-alt px-8 py-12 text-center shadow-sm transition-opacity duration-300 md:px-12"
+            style={{ opacity: fade ? 1 : 0 }}
+          >
+            <div className="pointer-events-none absolute left-5 top-2 select-none font-heading text-7xl leading-none text-gold/25">
+              &ldquo;
+            </div>
 
-            <p className="text-lg md:text-xl text-brown leading-relaxed italic">
+            <p className="relative text-lg italic leading-relaxed text-brown md:text-xl">
               {getLocalizedField(current.quote, language)}
             </p>
 
-            <div className="font-heading text-sm uppercase tracking-widest text-brown mt-6 font-semibold">
+            <div className="mt-6 font-heading text-sm font-semibold uppercase tracking-widest text-brown">
               {current.customer_name}
             </div>
-            <div className="text-sm text-brown-light mt-1">{current.service}</div>
+            <div className="mt-1 text-sm text-brown-light">{current.service}</div>
 
             {/* Star rating */}
-            <div className="text-gold text-sm mt-3" aria-label={`${current.rating} ${t("a11y.starRating")}`}>
+            <div className="mt-3 text-sm text-gold" aria-label={`${current.rating} ${t("a11y.starRating")}`}>
               {Array.from({ length: current.rating }, (_, i) => (
                 <span key={i}>&#9733;</span>
               ))}
