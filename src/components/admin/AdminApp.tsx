@@ -186,6 +186,14 @@ const NAV_GROUPS = [
 
 function Dashboard({ email }: { email: string }) {
   const [section, setSection] = useState<string>("orders");
+  const [pendingOrderId, setPendingOrderId] = useState<string | null>(null);
+
+  // Leads → "convert" lands the user inside the freshly created order.
+  function goToOrder(orderId: string) {
+    setPendingOrderId(orderId);
+    setSection("orders");
+  }
+
   return (
     <ConfirmProvider>
       <main className="min-h-screen bg-cream text-brown">
@@ -213,7 +221,10 @@ function Dashboard({ email }: { email: string }) {
                 {g.items.map((s) => (
                   <button
                     key={s.key}
-                    onClick={() => setSection(s.key)}
+                    onClick={() => {
+                      setPendingOrderId(null);
+                      setSection(s.key);
+                    }}
                     className={`min-h-[44px] whitespace-nowrap rounded-lg px-4 py-3 text-left text-sm font-medium transition-colors ${
                       section === s.key ? "bg-brown text-cream" : "text-brown hover:bg-cream-alt"
                     }`}
@@ -225,7 +236,7 @@ function Dashboard({ email }: { email: string }) {
             ))}
           </nav>
           <div className="flex-1 p-6 max-w-3xl">
-            <SectionView section={section} />
+            <SectionView section={section} pendingOrderId={pendingOrderId} onGoToOrder={goToOrder} />
           </div>
         </div>
       </main>
@@ -233,14 +244,22 @@ function Dashboard({ email }: { email: string }) {
   );
 }
 
-function SectionView({ section }: { section: string }) {
+function SectionView({
+  section,
+  pendingOrderId,
+  onGoToOrder,
+}: {
+  section: string;
+  pendingOrderId: string | null;
+  onGoToOrder: (orderId: string) => void;
+}) {
   switch (section) {
     case "orders":
-      return <OrdersEditor />;
+      return <OrdersEditor key={pendingOrderId ?? "list"} initialOrderId={pendingOrderId ?? undefined} />;
     case "customers":
       return <CustomersEditor />;
     case "leads":
-      return <LeadsEditor />;
+      return <LeadsEditor onConverted={onGoToOrder} />;
     case "gallery":
       return <GalleryEditor />;
     case "services":
