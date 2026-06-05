@@ -121,3 +121,31 @@ export const SCROLL = {
 export const EXTERNAL = {
   WHATSAPP_BASE: "https://wa.me",
 } as const;
+
+// ─── Admin Button Classes (centralized; WCAG ≥4.5:1) ─────────────
+// Shared by every admin control so contrast/sizing live in one place.
+// cream-on-brown / brown-on-gold clear 4.5:1; the old `bg-gold text-cream`
+// (2.53:1) is retired. min-h-[44px] meets the touch-target floor.
+export const ADMIN_BTN = {
+  PRIMARY:
+    "inline-flex items-center justify-center gap-2 rounded-lg bg-brown px-5 py-3 text-base font-medium text-cream transition-colors hover:bg-gold-hover disabled:opacity-50 min-h-[44px]",
+  SECONDARY:
+    "inline-flex items-center justify-center gap-2 rounded-lg border border-brown-light/30 px-5 py-3 text-base font-medium text-brown transition-colors hover:border-gold disabled:opacity-50 min-h-[44px]",
+  DANGER:
+    "inline-flex items-center justify-center gap-2 rounded-lg bg-red-600 px-5 py-3 text-base font-medium text-white transition-colors hover:bg-red-700 disabled:opacity-50 min-h-[44px]",
+} as const;
+
+// ─── Order stage sequence (single ordering source) ───────────────
+// The 9 statuses in lifecycle order. Display labels come from
+// translations.ts `status.*`; this is the one place the ORDER is defined.
+export const ORDER_STAGE_SEQUENCE = [
+  ORDER_STATUS.BOOKED,
+  ORDER_STATUS.CONSULTED,
+  ORDER_STATUS.MEASURED,
+  ORDER_STATUS.FABRIC_SELECTED,
+  ORDER_STATUS.IN_PROGRESS,
+  ORDER_STATUS.READY_FOR_FITTING,
+  ORDER_STATUS.ALTERATIONS,
+  ORDER_STATUS.COMPLETED,
+  ORDER_STATUS.DELIVERED,
+] as const;

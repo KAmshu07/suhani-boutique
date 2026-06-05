@@ -16,6 +16,21 @@
   --font-hindi: "Tiro Devanagari Hindi", serif;
 }
 
+/* Visible keyboard focus everywhere (replaces bare focus:outline-none) */
+:focus-visible {
+  outline: 2px solid var(--color-brown);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Devanagari: use the loaded Tiro face + room for matras when lang is hi/cg.
+   document.documentElement.lang is set by i18n setLanguage(). */
+:lang(hi),
+:lang(cg) {
+  font-family: var(--font-hindi);
+  line-height: 1.7;
+}
+
 /* Smooth scroll for anchor navigation */
 html {
   scroll-behavior: smooth;

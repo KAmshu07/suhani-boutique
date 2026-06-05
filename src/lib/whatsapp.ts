@@ -21,3 +21,12 @@ export function buildWhatsAppMessage(
     .map((field) => `${field.label}: ${field.value}`);
   return lines.length ? `${greeting}\n\n${lines.join("\n")}` : greeting;
 }
+
+// Builds a plain wa.me contact link (no prefilled message) from a raw phone
+// number, assuming India (+91) for bare 10-digit numbers. Single source for the
+// "open WhatsApp with this customer" affordance used across admin screens.
+export function getContactUrl(phone: string): string {
+  const digits = phone.replace(/\D/g, "");
+  const full = digits.length === 10 ? "91" + digits : digits;
+  return `${EXTERNAL.WHATSAPP_BASE}/${full}`;
+}

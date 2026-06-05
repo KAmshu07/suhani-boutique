@@ -1,0 +1,30 @@
+import { describe, it, expect } from "vitest";
+import { formatINR, formatDate } from "./format";
+
+describe("formatINR", () => {
+  it("groups with Indian digit grouping and a rupee sign", () => {
+    expect(formatINR(125000)).toBe("₹1,25,000");
+  });
+  it("handles zero and small numbers", () => {
+    expect(formatINR(0)).toBe("₹0");
+    expect(formatINR(500)).toBe("₹500");
+  });
+  it("coerces non-finite values to ₹0", () => {
+    expect(formatINR(NaN)).toBe("₹0");
+    expect(formatINR(Infinity)).toBe("₹0");
+  });
+});
+
+describe("formatDate", () => {
+  it("formats a date-only ISO string day-first", () => {
+    expect(formatDate("2026-06-21")).toBe("21 Jun 2026");
+  });
+  it("returns empty string for nullish or empty input", () => {
+    expect(formatDate(null)).toBe("");
+    expect(formatDate(undefined)).toBe("");
+    expect(formatDate("")).toBe("");
+  });
+  it("returns empty string for an unparseable date", () => {
+    expect(formatDate("not-a-date")).toBe("");
+  });
+});
