@@ -1,7 +1,7 @@
 # Admin Usability Foundation — Design Spec
 
 - **Date:** 2026-06-05
-- **Status:** Design — approved (owner sign-off 2026-06-05); ready for implementation plan
+- **Status:** Implemented 2026-06-05 (build, lint, and tests green; quality-reviewed)
 - **Repo:** `suhani-boutique` (Next.js 16.2.2, static export, GitHub Pages; React 19; Tailwind v4)
 - **Author:** Claude (with Amritanshu)
 - **Informed by:** a 12-agent deep UX audit + external research (see `§13`), every critical finding re-verified against source.
