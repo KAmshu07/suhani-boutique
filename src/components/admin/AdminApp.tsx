@@ -29,16 +29,9 @@ export default function AdminApp() {
   useEffect(() => {
     let alive = true;
 
-    async function load(next: Session | null) {
-      if (!next) {
-        if (alive) {
-          setSession(null);
-          setRole(null);
-          setChecked(true);
-        }
-        return;
-      }
-      // Read our own profile role (RLS allows reading your own row).
+    // Read our own profile role (RLS allows reading your own row), then show the
+    // dashboard. Sets `checked` true; never back to false (see below).
+    async function resolveRole(next: Session) {
       const { data } = await supabase
         .from("profiles")
         .select("role")
@@ -50,11 +43,32 @@ export default function AdminApp() {
       setChecked(true);
     }
 
-    supabase.auth.getSession().then(({ data }) => load(data.session));
-    const { data: sub } = supabase.auth.onAuthStateChange((_event, next) => {
-      setChecked(false);
-      load(next);
+    supabase.auth.getSession().then(({ data }) => {
+      if (!alive) return;
+      if (data.session) void resolveRole(data.session);
+      else setChecked(true); // no session → render Login
     });
+
+    // React to auth changes WITHOUT tearing the dashboard down. Supabase fires
+    // TOKEN_REFRESHED / SIGNED_IN when the tab regains focus; flipping `checked`
+    // off here would remount the dashboard and lose the open Site-Control /
+    // Order-Book section. So we never set `checked` back to false — we only
+    // update session/role in place, and tear down to Login on a real sign-out.
+    const { data: sub } = supabase.auth.onAuthStateChange((event, next) => {
+      if (!next || event === "SIGNED_OUT") {
+        setSession(null);
+        setRole(null);
+        return;
+      }
+      if (event === "SIGNED_IN") {
+        void resolveRole(next); // genuine login, or a focus re-auth (role unchanged)
+        return;
+      }
+      // TOKEN_REFRESHED / USER_UPDATED / INITIAL_SESSION: keep the refreshed
+      // session; role is unchanged and the dashboard stays mounted.
+      setSession(next);
+    });
+
     return () => {
       alive = false;
       sub.subscription.unsubscribe();
