@@ -14,6 +14,7 @@ import TestimonialsEditor from "@/components/admin/editors/TestimonialsEditor";
 import OrdersEditor from "@/components/admin/editors/OrdersEditor";
 import CustomersEditor from "@/components/admin/editors/CustomersEditor";
 import LeadsEditor from "@/components/admin/editors/LeadsEditor";
+import { ConfirmProvider } from "@/components/admin/ConfirmDialog";
 
 // Admin shell. Two layers of protection: (1) the database RLS only lets the
 // 'admin' role read/write real data, and (2) this UI only shows the dashboard
@@ -186,47 +187,49 @@ const NAV_GROUPS = [
 function Dashboard({ email }: { email: string }) {
   const [section, setSection] = useState<string>("orders");
   return (
-    <main className="min-h-screen bg-cream text-brown">
-      <header className="flex items-center justify-between border-b border-brown-light/15 px-6 py-4">
-        <h1 className="font-heading text-lg font-semibold uppercase tracking-widest">
-          {businessInfo.name} Admin
-        </h1>
-        <div className="flex items-center gap-4">
-          <span className="hidden sm:inline text-xs text-brown-light">{email}</span>
-          <button
-            onClick={() => supabase.auth.signOut()}
-            className="text-sm font-heading uppercase tracking-wider text-brown-light hover:text-gold transition-colors"
-          >
-            Log out
-          </button>
+    <ConfirmProvider>
+      <main className="min-h-screen bg-cream text-brown">
+        <header className="flex items-center justify-between border-b border-brown-light/15 px-6 py-4">
+          <h1 className="font-heading text-lg font-semibold uppercase tracking-widest">
+            {businessInfo.name} Admin
+          </h1>
+          <div className="flex items-center gap-4">
+            <span className="hidden sm:inline text-sm text-brown-light">{email}</span>
+            <button
+              onClick={() => supabase.auth.signOut()}
+              className="min-h-[44px] rounded-lg px-3 py-2 text-sm font-medium text-brown transition-colors hover:bg-cream-alt"
+            >
+              Log out
+            </button>
+          </div>
+        </header>
+        <div className="flex flex-col md:flex-row">
+          <nav className="flex md:flex-col gap-3 overflow-x-auto border-b border-brown-light/15 p-3 md:w-56 md:shrink-0 md:border-b-0 md:border-r">
+            {NAV_GROUPS.map((g) => (
+              <div key={g.group} className="flex md:flex-col gap-1.5">
+                <span className="hidden md:block px-3 pt-1 text-xs font-heading uppercase tracking-widest text-brown-light/60">
+                  {g.group}
+                </span>
+                {g.items.map((s) => (
+                  <button
+                    key={s.key}
+                    onClick={() => setSection(s.key)}
+                    className={`min-h-[44px] whitespace-nowrap rounded-lg px-4 py-3 text-left text-sm font-medium transition-colors ${
+                      section === s.key ? "bg-brown text-cream" : "text-brown hover:bg-cream-alt"
+                    }`}
+                  >
+                    {s.label}
+                  </button>
+                ))}
+              </div>
+            ))}
+          </nav>
+          <div className="flex-1 p-6 max-w-3xl">
+            <SectionView section={section} />
+          </div>
         </div>
-      </header>
-      <div className="flex flex-col md:flex-row">
-        <nav className="flex md:flex-col gap-3 overflow-x-auto border-b border-brown-light/15 p-3 md:w-52 md:shrink-0 md:border-b-0 md:border-r">
-          {NAV_GROUPS.map((g) => (
-            <div key={g.group} className="flex md:flex-col gap-1">
-              <span className="hidden md:block px-3 pt-1 text-[10px] font-heading uppercase tracking-widest text-brown-light/50">
-                {g.group}
-              </span>
-              {g.items.map((s) => (
-                <button
-                  key={s.key}
-                  onClick={() => setSection(s.key)}
-                  className={`whitespace-nowrap px-3 py-2 text-left text-xs font-heading uppercase tracking-wider transition-colors ${
-                    section === s.key ? "bg-gold text-cream" : "text-brown-light hover:text-gold"
-                  }`}
-                >
-                  {s.label}
-                </button>
-              ))}
-            </div>
-          ))}
-        </nav>
-        <div className="flex-1 p-6 max-w-3xl">
-          <SectionView section={section} />
-        </div>
-      </div>
-    </main>
+      </main>
+    </ConfirmProvider>
   );
 }
 
