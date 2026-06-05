@@ -17,7 +17,13 @@ describe("formatINR", () => {
 
 describe("formatDate", () => {
   it("formats a date-only ISO string day-first", () => {
-    expect(formatDate("2026-06-21")).toBe("21 Jun 2026");
+    // Assert by parts so an ICU/Node change to the separator or month glyph
+    // doesn't break the build without a behavior change.
+    const out = formatDate("2026-06-21");
+    expect(out).toContain("21");
+    expect(out).toContain("Jun");
+    expect(out).toContain("2026");
+    expect(out.indexOf("21")).toBeLessThan(out.indexOf("2026")); // day before year
   });
   it("returns empty string for nullish or empty input", () => {
     expect(formatDate(null)).toBe("");
