@@ -56,7 +56,7 @@ export default function Hero() {
           {t("hero.title")}
         </h1>
 
-        <p className="mt-4 font-heading text-lg font-light italic uppercase tracking-widest text-cream/70 md:text-xl">
+        <p className="mt-4 font-heading text-lg font-light italic uppercase tracking-widest text-cream/85 md:text-xl">
           {t("hero.subtitle")}
         </p>
 

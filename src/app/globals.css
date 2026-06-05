@@ -127,6 +127,12 @@ html {
   animation: hero-kenburns 22s ease-out forwards;
 }
 
+/* Keep hero text legible over ANY uploaded image (bright photos included) */
+.hero-content h1,
+.hero-content p {
+  text-shadow: 0 2px 14px rgba(44, 24, 16, 0.5);
+}
+
 /* ─── Scroll cue (gentle bobble at the bottom of the hero) ──────── */
 @keyframes scroll-bobble {
   0%, 100% { transform: translateY(0); opacity: 0.65; }
