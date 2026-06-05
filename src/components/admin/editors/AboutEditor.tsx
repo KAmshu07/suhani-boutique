@@ -28,28 +28,33 @@ export default function AboutEditor() {
         <h2 className="font-heading text-lg font-semibold uppercase tracking-wider">About</h2>
         {status && <span className="text-base text-brown-light">{status}</span>}
       </div>
+      <p className="text-base text-brown-light">Your &ldquo;Our Story&rdquo; section on the website.</p>
 
       <LocalizedInput label="Heading" value={value.heading} onChange={(v) => setValue((s) => ({ ...s, heading: v }))} />
       <LocalizedInput label="Story" multiline value={value.story} onChange={(v) => setValue((s) => ({ ...s, story: v }))} />
 
       <div>
-        <p className="mb-2 text-sm font-heading uppercase tracking-wider text-brown-light">Photo</p>
+        <p className="mb-2 text-sm font-heading uppercase tracking-wider text-brown-light">Photo (shown next to your story)</p>
         <ImageUpload folder="about" currentUrl={value.image_url} onUploaded={(url) => setValue((s) => ({ ...s, image_url: url }))} />
       </div>
 
-      <div className="grid grid-cols-3 gap-3">
-        <label className="text-sm text-brown-light">
-          Experience
-          <input className={fieldClass} value={value.stats.experience} onChange={(e) => setStat("experience", e.target.value)} />
-        </label>
-        <label className="text-sm text-brown-light">
-          Customers
-          <input className={fieldClass} value={value.stats.customers} onChange={(e) => setStat("customers", e.target.value)} />
-        </label>
-        <label className="text-sm text-brown-light">
-          Specialties
-          <input className={fieldClass} value={value.stats.specialties} onChange={(e) => setStat("specialties", e.target.value)} />
-        </label>
+      <div>
+        <p className="mb-2 text-sm font-heading uppercase tracking-wider text-brown-light">Highlights</p>
+        <p className="mb-3 text-xs text-brown-light/70">Short numbers shown as badges — for example 20+, 1000+, 6.</p>
+        <div className="grid grid-cols-3 gap-3">
+          <label className="text-sm text-brown-light">
+            Years of experience
+            <input className={`${fieldClass} mt-1`} value={value.stats.experience} onChange={(e) => setStat("experience", e.target.value)} />
+          </label>
+          <label className="text-sm text-brown-light">
+            Happy customers
+            <input className={`${fieldClass} mt-1`} value={value.stats.customers} onChange={(e) => setStat("customers", e.target.value)} />
+          </label>
+          <label className="text-sm text-brown-light">
+            Specialties
+            <input className={`${fieldClass} mt-1`} value={value.stats.specialties} onChange={(e) => setStat("specialties", e.target.value)} />
+          </label>
+        </div>
       </div>
 
       <div>

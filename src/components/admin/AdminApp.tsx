@@ -16,6 +16,7 @@ import CustomersEditor from "@/components/admin/editors/CustomersEditor";
 import LeadsEditor from "@/components/admin/editors/LeadsEditor";
 import { ConfirmProvider } from "@/components/admin/ConfirmDialog";
 import { ADMIN_BTN } from "@/data/constants";
+import { ExternalLinkIcon } from "@/components/icons";
 
 // Admin shell. Two layers of protection: (1) the database RLS only lets the
 // 'admin' role read/write real data, and (2) this UI only shows the dashboard
@@ -213,6 +214,14 @@ function Dashboard({ email }: { email: string }) {
             {businessInfo.name} Admin
           </h1>
           <div className="flex items-center gap-4">
+            <a
+              href={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex min-h-[44px] items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-brown transition-colors hover:bg-cream-alt"
+            >
+              <ExternalLinkIcon className="h-4 w-4 text-gold" /> View your website
+            </a>
             <span className="hidden sm:inline text-sm text-brown-light">{email}</span>
             <button
               onClick={() => supabase.auth.signOut()}

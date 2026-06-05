@@ -4,6 +4,7 @@ import { upsertSetting } from "@/lib/admin/content-admin";
 import { useAdminSetting } from "@/lib/admin/use-admin-rows";
 import LocalizedInput from "@/components/admin/LocalizedInput";
 import SaveButton from "@/components/admin/SaveButton";
+import Toggle from "@/components/admin/Toggle";
 import type { Localized } from "@/lib/localized";
 
 type Announcement = { active: boolean; message: Partial<Localized> };
@@ -26,17 +27,9 @@ export default function AnnouncementEditor() {
         {status && <span className="text-base text-brown-light">{status}</span>}
       </div>
       <p className="text-base text-brown-light">
-        Show a banner across the top of the site (for example &ldquo;Closed today&rdquo;). Turn it off to hide it.
+        A banner across the top of your website (for example &ldquo;Closed today&rdquo; or &ldquo;Diwali offers on now&rdquo;). Turn it off to hide it.
       </p>
-      <label className="flex items-center gap-2 text-base">
-        <input
-          type="checkbox"
-          className="h-5 w-5"
-          checked={value.active}
-          onChange={(e) => setValue((v) => ({ ...v, active: e.target.checked }))}
-        />
-        Show the banner
-      </label>
+      <Toggle checked={value.active} onChange={(v) => setValue((s) => ({ ...s, active: v }))} label="Show the banner" />
       <LocalizedInput label="Message" value={value.message} onChange={(m) => setValue((v) => ({ ...v, message: m }))} />
       <div>
         <SaveButton onSave={save}>Save</SaveButton>
