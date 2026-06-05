@@ -4,6 +4,7 @@ import { listLeads, updateLead, findOrCreateCustomer, createOrder } from "@/lib/
 import { useAsyncData } from "@/lib/admin/use-admin-rows";
 import { getContactUrl } from "@/lib/whatsapp";
 import { ADMIN_BTN } from "@/data/constants";
+import { isErrorNotice, friendlyError } from "@/lib/admin/notice";
 import { PhoneIcon, WhatsAppIcon, MessageIcon, CheckIcon } from "@/components/icons";
 import EmptyState from "@/components/admin/EmptyState";
 import { useConfirm } from "@/components/admin/ConfirmDialog";
@@ -18,10 +19,6 @@ type Lead = {
   status: string;
   created_at: string;
 };
-
-function errMsg(e: unknown) {
-  return e instanceof Error ? e.message : String(e);
-}
 
 // Lead status carries its own icon + word (never colour alone). These are lead
 // stages (new/contacted/archived), distinct from the 9 order stages.
@@ -43,7 +40,7 @@ export default function LeadsEditor({ onConverted }: { onConverted: (orderId: st
       await updateLead(id, { status: s });
       await reload();
     } catch (e) {
-      setStatus("Problem: " + errMsg(e));
+      setStatus(friendlyError(e));
     }
   }
 
@@ -65,7 +62,7 @@ export default function LeadsEditor({ onConverted }: { onConverted: (orderId: st
       await reload();
       onConverted(order.id);
     } catch (e) {
-      setStatus("Problem: " + errMsg(e));
+      setStatus(friendlyError(e));
     }
   }
 
@@ -73,7 +70,7 @@ export default function LeadsEditor({ onConverted }: { onConverted: (orderId: st
     <div>
       <div className="flex items-center justify-between">
         <h2 className="font-heading text-lg font-semibold uppercase tracking-wider">Leads</h2>
-        {status && <span className={`text-base ${/problem/i.test(status) ? "text-red-600" : "text-green-700"}`}>{status}</span>}
+        {status && <span className={`text-base ${isErrorNotice(status) ? "text-red-600" : "text-green-700"}`}>{status}</span>}
       </div>
       <p className="mt-2 text-base text-brown-light">Enquiries that came in from the website.</p>
 

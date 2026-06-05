@@ -135,6 +135,11 @@ export const ADMIN_BTN = {
     "inline-flex items-center justify-center gap-2 rounded-lg bg-red-600 px-5 py-3 text-base font-medium text-white transition-colors hover:bg-red-700 disabled:opacity-50 min-h-[44px]",
 } as const;
 
+// Shared admin input/select/textarea field class (centralized like ADMIN_BTN so
+// legibility/contrast live in one place). Add `w-full` at the call site as needed.
+export const ADMIN_FIELD =
+  "bg-cream-alt border border-brown-light/20 px-3 py-2 text-base text-brown rounded focus:border-gold focus:outline-none";
+
 // ─── Order stage sequence (single ordering source) ───────────────
 // The 9 statuses in lifecycle order. Display labels come from
 // translations.ts `status.*`; this is the one place the ORDER is defined.

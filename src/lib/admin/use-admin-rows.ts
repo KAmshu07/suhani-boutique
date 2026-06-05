@@ -2,10 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { listAll, getSettingValue } from "@/lib/admin/content-admin";
-
-function msg(e: unknown) {
-  return e instanceof Error ? e.message : String(e);
-}
+import { friendlyError } from "@/lib/admin/notice";
 
 // Loads all rows of a table for the admin (including hidden ones) and exposes a
 // reload(). The fetch lives in the effect's promise callback (not a synchronous
@@ -20,7 +17,7 @@ export function useAdminRows<T>(table: string) {
         setRows(data as T[]);
         setStatus("");
       })
-      .catch((e) => setStatus("Failed to load: " + msg(e)));
+      .catch((e) => setStatus(friendlyError(e, "load")));
   }
 
   useEffect(() => {
@@ -32,7 +29,7 @@ export function useAdminRows<T>(table: string) {
         setStatus("");
       })
       .catch((e) => {
-        if (alive) setStatus("Failed to load: " + msg(e));
+        if (alive) setStatus(friendlyError(e, "load"));
       });
     return () => {
       alive = false;
@@ -56,7 +53,7 @@ export function useAdminSetting<T>(key: string, fallback: T) {
         setStatus("");
       })
       .catch((e) => {
-        if (alive) setStatus("Failed to load: " + msg(e));
+        if (alive) setStatus(friendlyError(e, "load"));
       });
     return () => {
       alive = false;
@@ -78,7 +75,7 @@ export function useAsyncData<T>(fetcher: () => Promise<T>, fallback: T) {
         setData(d);
         setStatus("");
       })
-      .catch((e) => setStatus("Failed to load: " + msg(e)));
+      .catch((e) => setStatus(friendlyError(e, "load")));
   }
 
   useEffect(() => {
@@ -91,7 +88,7 @@ export function useAsyncData<T>(fetcher: () => Promise<T>, fallback: T) {
         }
       })
       .catch((e) => {
-        if (alive) setStatus("Failed to load: " + msg(e));
+        if (alive) setStatus(friendlyError(e, "load"));
       });
     return () => {
       alive = false;

@@ -5,6 +5,7 @@ import { businessInfo } from "@/data/business-info";
 import { upsertSetting } from "@/lib/admin/content-admin";
 import { useAdminSetting } from "@/lib/admin/use-admin-rows";
 import SaveButton from "@/components/admin/SaveButton";
+import { ADMIN_FIELD } from "@/data/constants";
 
 type Info = {
   name?: string;
@@ -26,8 +27,7 @@ type Info = {
   [k: string]: unknown;
 };
 
-const fieldClass =
-  "w-full bg-cream-alt border border-brown-light/20 px-3 py-2 text-base text-brown focus:border-gold focus:outline-none rounded";
+const fieldClass = `w-full ${ADMIN_FIELD}`;
 
 function Row({ label, children }: { label: string; children: ReactNode }) {
   return (

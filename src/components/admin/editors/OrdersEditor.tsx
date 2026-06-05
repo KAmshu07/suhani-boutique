@@ -17,8 +17,9 @@ import {
 import { useAsyncData } from "@/lib/admin/use-admin-rows";
 import { getWhatsAppUrl } from "@/lib/whatsapp";
 import { orderStatusMessages } from "@/data/order-messages";
-import { ADMIN_BTN, ORDER_STAGE_SEQUENCE, PAYMENT_METHOD } from "@/data/constants";
+import { ADMIN_BTN, ADMIN_FIELD, ORDER_STAGE_SEQUENCE, PAYMENT_METHOD } from "@/data/constants";
 import { formatINR, formatDate } from "@/lib/format";
+import { isErrorNotice, friendlyError } from "@/lib/admin/notice";
 import { useTranslation } from "@/lib/i18n";
 import StatusStepper from "@/components/admin/StatusStepper";
 import SaveButton from "@/components/admin/SaveButton";
@@ -52,18 +53,14 @@ type Order = {
 const SEQ: readonly string[] = ORDER_STAGE_SEQUENCE;
 const idxOf = (s: string) => Math.max(0, SEQ.indexOf(s));
 
-function errMsg(e: unknown) {
-  return e instanceof Error ? e.message : String(e);
-}
 function sum<T>(arr: T[], f: (x: T) => number): number {
   return arr.reduce((a, x) => a + (Number(f(x)) || 0), 0);
 }
 function noticeClass(s: string) {
-  return /problem|enter|no phone|first/i.test(s) ? "text-red-600" : "text-green-700";
+  return isErrorNotice(s) ? "text-red-600" : "text-green-700";
 }
 
-const input =
-  "bg-cream-alt border border-brown-light/20 px-3 py-2 text-base text-brown rounded focus:border-gold focus:outline-none";
+const input = ADMIN_FIELD;
 
 export default function OrdersEditor({
   initialOrderId,
@@ -104,10 +101,13 @@ export default function OrdersEditor({
   async function run(label: string, fn: () => Promise<unknown>, refresh = true) {
     try {
       await fn();
-      if (refresh) await reload();
       setStatus(label);
     } catch (e) {
-      setStatus("Problem: " + errMsg(e));
+      setStatus(friendlyError(e));
+    } finally {
+      // Reload after success AND failure so an optimistic local patch can never
+      // stay diverged from the database.
+      if (refresh) await reload();
     }
   }
 
@@ -130,7 +130,7 @@ export default function OrdersEditor({
       setSelectedId(o.id);
       setStatus("New order started ✓");
     } catch (e) {
-      setStatus("Problem: " + errMsg(e));
+      setStatus(friendlyError(e, "start the order"));
     }
   }
 
@@ -224,9 +224,23 @@ export default function OrdersEditor({
                 Move to {statusLabel(next)} <ArrowRightIcon className="h-4 w-4" />
               </SaveButton>
             )}
-            <SaveButton variant="secondary" onSave={() => applyStatusToAllItems(o.id, o.status).then(reload)} savedLabel="Done">
+            <button
+              onClick={async () => {
+                const ok = await confirm({
+                  title: "Set all garments to the same status?",
+                  body: (
+                    <>
+                      All {o.order_items.length} garment(s) in order #{o.order_no} will be set to “{statusLabel(o.status)}”.
+                    </>
+                  ),
+                  confirmLabel: "Set all",
+                });
+                if (ok) run("All garments updated ✓", () => applyStatusToAllItems(o.id, o.status));
+              }}
+              className={ADMIN_BTN.SECONDARY}
+            >
               Set all garments to “{statusLabel(o.status)}”
-            </SaveButton>
+            </button>
           </div>
           <button
             onClick={() => setWa({ text: messageFor(o, o.status) })}
@@ -321,7 +335,7 @@ export default function OrdersEditor({
                   variant="inline"
                   onSelect={(key) => {
                     patchItem(o.id, it.id, { status: key });
-                    run("Garment updated ✓", () => updateOrderItem(it.id, { status: key }), false);
+                    run("Garment updated ✓", () => updateOrderItem(it.id, { status: key }));
                   }}
                 />
                 <div className="flex items-center justify-between">
@@ -448,7 +462,7 @@ export default function OrdersEditor({
               checked={o.is_rush}
               onChange={(e) => {
                 patchOrder(o.id, { is_rush: e.target.checked });
-                run("Saved ✓", () => updateOrder(o.id, { is_rush: e.target.checked }), false);
+                run("Saved ✓", () => updateOrder(o.id, { is_rush: e.target.checked }));
               }}
             />
             Mark as Rush / priority

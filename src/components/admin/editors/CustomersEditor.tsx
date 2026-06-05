@@ -4,7 +4,8 @@ import { useState } from "react";
 import { listCustomers, createCustomer, updateCustomer, deleteCustomer } from "@/lib/admin/orders-admin";
 import { useAsyncData } from "@/lib/admin/use-admin-rows";
 import { getContactUrl } from "@/lib/whatsapp";
-import { ADMIN_BTN } from "@/data/constants";
+import { ADMIN_BTN, ADMIN_FIELD } from "@/data/constants";
+import { isErrorNotice, friendlyError } from "@/lib/admin/notice";
 import { PhoneIcon, WhatsAppIcon, TrashIcon } from "@/components/icons";
 import SaveButton from "@/components/admin/SaveButton";
 import EmptyState from "@/components/admin/EmptyState";
@@ -12,7 +13,7 @@ import { useConfirm } from "@/components/admin/ConfirmDialog";
 
 type Customer = { id: string; phone: string; name: string | null; notes: string | null };
 
-const input = "bg-cream-alt border border-brown-light/20 px-3 py-2 text-base text-brown focus:border-gold focus:outline-none rounded";
+const input = ADMIN_FIELD;
 
 export default function CustomersEditor() {
   const confirm = useConfirm();
@@ -38,7 +39,7 @@ export default function CustomersEditor() {
       await reload();
       setStatus("Added ✓");
     } catch (e) {
-      setStatus("Problem: " + (e instanceof Error ? e.message : String(e)));
+      setStatus(friendlyError(e, "add the customer"));
     }
   }
   async function remove(c: Customer) {
@@ -67,7 +68,7 @@ export default function CustomersEditor() {
     <div>
       <div className="flex items-center justify-between">
         <h2 className="font-heading text-lg font-semibold uppercase tracking-wider">Customers</h2>
-        {status && <span className={`text-base ${/problem|enter|can't/i.test(status) ? "text-red-600" : "text-green-700"}`}>{status}</span>}
+        {status && <span className={`text-base ${isErrorNotice(status) ? "text-red-600" : "text-green-700"}`}>{status}</span>}
       </div>
 
       {adding ? (

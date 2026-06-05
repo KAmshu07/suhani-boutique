@@ -2,7 +2,8 @@
 
 import { upsertRow, deleteRow } from "@/lib/admin/content-admin";
 import { useAdminRows } from "@/lib/admin/use-admin-rows";
-import { ADMIN_BTN } from "@/data/constants";
+import { isErrorNotice, friendlyError } from "@/lib/admin/notice";
+import { ADMIN_BTN, ADMIN_FIELD } from "@/data/constants";
 import LocalizedInput from "@/components/admin/LocalizedInput";
 import SaveButton from "@/components/admin/SaveButton";
 import EmptyState from "@/components/admin/EmptyState";
@@ -22,10 +23,6 @@ type Row = {
 };
 
 const ICONS = ["scissors", "ruler", "crown", "fabric", "shirt", "sparkles"];
-
-function errMsg(e: unknown) {
-  return e instanceof Error ? e.message : String(e);
-}
 
 export default function ServicesEditor() {
   const confirm = useConfirm();
@@ -47,7 +44,7 @@ export default function ServicesEditor() {
       await deleteRow("services", id);
       await reload();
     } catch (e) {
-      setStatus("Delete failed: " + errMsg(e));
+      setStatus(friendlyError(e, "delete"));
     }
   }
 
@@ -67,18 +64,17 @@ export default function ServicesEditor() {
       await reload();
       setStatus("Added (hidden until you fill it in) ✓");
     } catch (e) {
-      setStatus("Add failed: " + errMsg(e));
+      setStatus(friendlyError(e, "add"));
     }
   }
 
-  const field =
-    "bg-cream-alt border border-brown-light/20 px-3 py-2 text-base text-brown focus:border-gold focus:outline-none rounded";
+  const field = ADMIN_FIELD;
 
   return (
     <div>
       <div className="flex items-center justify-between">
         <h2 className="font-heading text-lg font-semibold uppercase tracking-wider">Services</h2>
-        {status && <span className={`text-base ${/fail/i.test(status) ? "text-red-600" : "text-green-700"}`}>{status}</span>}
+        {status && <span className={`text-base ${isErrorNotice(status) ? "text-red-600" : "text-green-700"}`}>{status}</span>}
       </div>
       <button onClick={add} className={`mt-3 ${ADMIN_BTN.PRIMARY}`}>
         + Add service

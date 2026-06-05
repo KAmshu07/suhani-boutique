@@ -6,9 +6,9 @@ import LocalizedInput from "@/components/admin/LocalizedInput";
 import ImageUpload from "@/components/admin/ImageUpload";
 import SaveButton from "@/components/admin/SaveButton";
 import { ABOUT_DEFAULTS, type AboutContent } from "@/lib/about-defaults";
+import { ADMIN_FIELD } from "@/data/constants";
 
-const fieldClass =
-  "w-full bg-cream-alt border border-brown-light/20 px-3 py-2 text-base text-brown focus:border-gold focus:outline-none rounded";
+const fieldClass = `w-full ${ADMIN_FIELD}`;
 
 export default function AboutEditor() {
   const { value, setValue, status } = useAdminSetting<AboutContent>("about", ABOUT_DEFAULTS);
